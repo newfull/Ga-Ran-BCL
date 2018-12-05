@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Ga Ran BCL</string>
+    <string name="app_contributor_one">Nguyễn Thế Biển</string>
+    <string name="app_contributor_two">Nguyễn Thành Công</string>
+    <string name="app_contributor_three">Chiếng Thị Hồng Lợi</string>
+    <string name="crew">BCL</string>
 </resources>
