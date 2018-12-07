@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#ff2222</color>
+    <color name="colorPrimaryDark">#bb2222</color>
+    <color name="colorAccent">#e14d5f</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="dark_imagesBacground">#c1b3b3</color>
+    <color name="dark_activityBackground">#f9f9f9</color>
+    <color name="dark_selectedBottomNavigationButton">#FF8A65</color>
+    <color name="dark_normalBottomNavigationButton">#ce373434</color>
+    <color name="dark_devider">#444444</color>
 </resources>
