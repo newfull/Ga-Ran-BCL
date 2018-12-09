@@ -20,7 +20,6 @@ public class CartFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-
         return view;
     }
 }

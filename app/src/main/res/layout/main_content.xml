@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/banner"
+                app:layout_collapseMode="parallax" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|end"
+                android:orientation="horizontal"
+                app:layout_collapseMode="parallax">
+
+                <Button
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:backgroundTintMode="src_in"
+                    android:drawableLeft="@drawable/com_facebook_button_send_icon_blue"
+                    android:fontFamily="sans-serif"
+                    android:text="Đăng nhập"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark_activityBackground"
+                    android:textColorHighlight="@android:color/transparent"
+                    android:textSize="16sp"
+                    android:typeface="sans" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:orientation="horizontal"
+                app:layout_collapseMode="parallax">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginTop="35dp"
+                    android:contentDescription="Logo BCL"
+                    app:srcCompat="@drawable/logo" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="45dp"
+                android:orientation="vertical">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/sliderViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/sliderIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    android:visibility="gone"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|end"
+                android:orientation="horizontal"
+                app:layout_collapseMode="parallax">
+
+                <Button
+                    android:id="@+id/btn_cart"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="64dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:backgroundTintMode="src_in"
+                    android:drawableLeft="@drawable/cart_toolbar"
+                    android:fontFamily="serif-monospace"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark_activityBackground"
+                    android:textColorHighlight="@android:color/transparent"
+                    android:textSize="20sp"
+                    android:typeface="normal" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="top"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <LinearLayout
+                    android:id="@+id/toolbar_name_bcl"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="start"
+                    android:orientation="horizontal"
+                    >
+                    <RelativeLayout
+                        android:layout_height="match_parent"
+                        android:layout_width="139sp"
+                        android:gravity="start"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="9.5sp"
+                            android:layout_marginTop="9.5sp"
+                            app:srcCompat="@drawable/app_name_bcl" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top|end"
+                        android:orientation="horizontal">
+
+                        <Button
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="64dp"
+                            android:layout_height="60dp"
+                            android:backgroundTint="@android:color/transparent"
+                            android:backgroundTintMode="src_in"
+                            android:drawableLeft="@drawable/cart_toolbar"
+                            android:fontFamily="serif-monospace"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/dark_activityBackground"
+                            android:textColorHighlight="@android:color/transparent"
+                            android:textSize="20sp"
+                            android:typeface="normal" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+    </android.support.v4.view.ViewPager>
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        app:tabBackground="@color/white"
+        app:tabGravity="fill"
+        app:tabIndicatorAnimationDuration="500"
+        app:tabIndicatorGravity="top"
+        app:tabIndicatorHeight="4dp"
+        app:tabMode="fixed" />
+
+</android.support.design.widget.CoordinatorLayout>

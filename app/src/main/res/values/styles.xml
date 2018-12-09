@@ -13,4 +13,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="LoginBackground">
+        <item name="android:alpha">0.5</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="DetailDialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>

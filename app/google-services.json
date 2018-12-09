@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "451715132939",
+    "firebase_url": "https://ga-ran-bcl-d02e7.firebaseio.com",
+    "project_id": "ga-ran-bcl-d02e7",
+    "storage_bucket": "ga-ran-bcl-d02e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451715132939:android:97359d206f0e36f8",
+        "android_client_info": {
+          "package_name": "vn.bcl.garanbcl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451715132939-oirdruose6gni88586b1uua9g2s57b32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCda-xYbNpnYxQf1W5aAWHdjRoC9zc_atE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
