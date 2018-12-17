@@ -27,6 +27,7 @@
     <string name="action_sign_in_short">Đăng nhập</string>
     <string name="action_sign_up_short">Đăng ký</string>
     <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="error_invalid_name">Tên không hợp lệ</string>
     <string name="error_invalid_password">Mật khẩu không hợp lệ</string>
     <string name="error_short_password">Mật khẩu phải từ 6-20 kí tự</string>
     <string name="error_incorrect_password">Mật khẩu sai</string>
@@ -44,6 +45,17 @@
     <string name="password_mismatch">Thông tin chưa khớp</string>
     <string name="login_failed">Đăng nhập thất bại</string>
     <string name="login_failed_desc">Mật khẩu hoặc Email không đúng</string>
+
+    <string name="logout_confirm">Đăng xuất</string>
+    <string name="logout_question">Bạn thật sự muốn đăng xuất khỏi ứng dụng?</string>
+    <string name="logout_ok">Xác nhận</string>
+    <string name="logout_succeeded">Đăng xuất thành công!</string>
+    <string name="logout_cancel">Hủy</string>
+
+    <string name="quit_confirm">Đóng ứng dụng</string>
+    <string name="quit_question">Bạn thật sự muốn thoát ứng dụng?</string>
+    <string name="quit_ok">Đóng</string>
+    <string name="quit_cancel">Hủy</string>
 
     <string name="signup_title">ĐĂNG KÝ</string>
     <string name="signup_desc">Đăng ký một tài khoản mới</string>

@@ -1,9 +1,5 @@
 package vn.bcl.garanbcl.model;
 
-/**
- * Created by wolfsoft4 on 20/9/18.
- */
-
 public class ProfileModel {
     Integer inbox,arrow;
     String txttrades,txthistory;

@@ -12,15 +12,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import vn.bcl.garanbcl.R;
+import vn.bcl.garanbcl.model.OnItemClickListener;
 import vn.bcl.garanbcl.model.ProfileModel;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
     Context context;
     private ArrayList<ProfileModel> profileModelArrayList;
+    private OnItemClickListener listener;
 
-    public ProfileAdapter(Context context, ArrayList<ProfileModel> profileModelArrayList) {
+
+    public ProfileAdapter(Context context, ArrayList<ProfileModel> profileModelArrayList, OnItemClickListener listener) {
         this.context = context;
         this.profileModelArrayList = profileModelArrayList;
+        this.listener = listener;
     }
 
 
@@ -39,6 +43,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         holder.txttrades.setText(profileModelArrayList.get(position).getTxttrades());
         holder.txthistory.setText(profileModelArrayList.get(position).getTxthistory());
 
+        holder.bind(profileModelArrayList.get(position), listener);
     }
 
     @Override
@@ -57,6 +62,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             arrow=itemView.findViewById(R.id.arrow);
             txttrades=itemView.findViewById(R.id.txttrades);
             txthistory=itemView.findViewById(R.id.txthistory);
+        }
+
+        public void bind(final ProfileModel item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 }

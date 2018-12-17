@@ -4,12 +4,6 @@
     android:elevation="0sp">
 
     <group android:checkableBehavior="single"
-        android:id="@+id/dummy_group">
-        <item android:id="@+id/dummy_item"
-            tools:ignore="MenuTitle" />
-    </group>
-
-    <group android:checkableBehavior="single"
         android:id="@+id/main_function">
         <item
             android:id="@+id/nav_home"

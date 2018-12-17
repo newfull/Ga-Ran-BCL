@@ -3,44 +3,40 @@ package vn.bcl.garanbcl.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.util.AsyncListUtil;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cielyang.android.clearableedittext.ClearableEditText;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.util.concurrent.Executor;
 
 import vn.bcl.garanbcl.LoginActivity;
 import vn.bcl.garanbcl.R;
-import vn.bcl.garanbcl.users.SmartUser;
-import vn.bcl.garanbcl.util.LoginType;
-import vn.bcl.garanbcl.util.SmartLogin;
-import vn.bcl.garanbcl.util.SmartLoginConfig;
-import vn.bcl.garanbcl.util.SmartLoginFactory;
+import vn.bcl.garanbcl.util.Constants;
 
 
 public class SignupFragment extends Fragment {
-
-    private UserSignupTask mAuthTask = null;
 
     // UI references.
     private ClearableEditText mEmailView;
@@ -52,11 +48,8 @@ public class SignupFragment extends Fragment {
     private static final String EMAIL = "email";
 
     private TextView mEmailSignUpButton, signInNowButton;
-    SmartUser currentUser;
-    SmartLoginConfig config;
-    SmartLogin smartLogin;
 
-    protected FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    protected FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public SignupFragment() {}
 
@@ -190,10 +183,6 @@ public class SignupFragment extends Fragment {
     }
 
     private void attemptSignup() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mNameView.setError(null);
         mEmailView.setError(null);
@@ -225,7 +214,7 @@ public class SignupFragment extends Fragment {
             focusView = mNameView;
             cancel = true;
         } else if (!isNameValid(name)) {
-            mNameView.setError(getString(R.string.error_invalid_email));
+            mNameView.setError(getString(R.string.error_invalid_name));
             focusView = mNameView;
             cancel = true;
         }
@@ -244,13 +233,41 @@ public class SignupFragment extends Fragment {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            mAuthTask = new UserSignupTask();
-            mAuthTask.execute((Void) null);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            try {
+                                //check if successful
+                                if (task.isSuccessful()) {
+                                    showProgress(false);
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(mNameView.getText().toString())
+                                     //       .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
+                                            .build();
+
+                                    user.updateProfile(profileUpdates);
+
+                                    Intent data = new Intent();
+                                    getActivity().setResult(Constants.REQUEST_CODE, data.putExtra("User", mAuth.getCurrentUser().getUid()));
+                                    getActivity().finish();
+                                }else{
+                                    showProgress(false);
+                                    Toast.makeText(getActivity(), "Không thể đăng ký, xin hãy thử lại sau!",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
         }
     }
 
     private boolean isNameValid(String name) {
-        return false;
+        return (name.length() < 10 || name.indexOf(" ") < 0 || name.startsWith(" ") || name.matches(".*\\d+.*"));
     }
 
     private boolean isEmailValid(String email) {
@@ -296,39 +313,6 @@ public class SignupFragment extends Fragment {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mSignupFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
-
-    public class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                // Simulate network access.
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            mEmailView.requestFocus();
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-
-            mEmailView.requestFocus();
-        }
-
-
     }
 
 }

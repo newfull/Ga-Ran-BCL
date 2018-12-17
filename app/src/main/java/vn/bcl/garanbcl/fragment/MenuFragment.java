@@ -2,45 +2,25 @@ package vn.bcl.garanbcl.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import vn.bcl.garanbcl.R;
 import vn.bcl.garanbcl.adapter.CategoryPagerAdapter;
-import vn.bcl.garanbcl.adapter.OrderAdapter;
 import vn.bcl.garanbcl.model.Category;
 import vn.bcl.garanbcl.model.Item;
 import vn.bcl.garanbcl.model.Order;
@@ -65,8 +45,6 @@ public class MenuFragment extends Fragment{
     private Button btnCompleteOrder;
 
     private ProgressDialog dialog;
-
-    private OrderAdapter orderAdapter;
 
     private ArrayList<Category> categoryList;
 
@@ -142,7 +120,6 @@ public class MenuFragment extends Fragment{
             orderList.add(new Order(item, quantity));
         }
 
-        orderAdapter.notifyDataSetChanged();
         rvOrder.smoothScrollToPosition(orderList.size() - 1);
         updateOrderTotal();
         updateBadge();

@@ -24,10 +24,7 @@ import butterknife.ButterKnife;
 import vn.bcl.garanbcl.adapter.TabAdapter;
 import vn.bcl.garanbcl.fragment.LoginFragment;
 import vn.bcl.garanbcl.fragment.SignupFragment;
-import vn.bcl.garanbcl.users.SmartUser;
 import vn.bcl.garanbcl.util.CheckInternetConnection;
-import vn.bcl.garanbcl.util.SmartLogin;
-import vn.bcl.garanbcl.util.SmartLoginConfig;
 
 public class LoginActivity extends AppCompatActivity {
     private TabAdapter tabAdapter;
@@ -38,10 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     private String primaryColor = "#ff2222";
     private String inactiveColor = "#ffffff";
 
-    private SmartUser currentUser;
-    //GoogleApiClient mGoogleApiClient;
-    private SmartLoginConfig config;
-    private SmartLogin smartLogin;
     private CheckInternetConnection connected;
 
     @Override
@@ -190,9 +183,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (smartLogin != null) {
-            smartLogin.onActivityResult(requestCode, resultCode, data, config);
-        }
+
     }
 
     public void hideKeyboard(View view) {

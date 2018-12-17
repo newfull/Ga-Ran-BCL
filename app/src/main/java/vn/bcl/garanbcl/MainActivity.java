@@ -45,12 +45,13 @@ import android.widget.ViewSwitcher;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.bumptech.glide.Glide;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.firebase.client.Firebase;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.geniusforapp.fancydialog.FancyAlertDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.steelkiwi.library.IncrementProductView;
 import com.steelkiwi.library.listener.OnStateListener;
 
@@ -62,29 +63,22 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import live.utkarshdev.maincontentslidingnavview.ContentSlidingDrawerLayout;
 import vn.bcl.garanbcl.adapter.ItemAdapter;
-import vn.bcl.garanbcl.adapter.OrderAdapter;
 import vn.bcl.garanbcl.adapter.SliderAdapter;
 import vn.bcl.garanbcl.adapter.TabAdapter;
 import vn.bcl.garanbcl.model.Item;
 import vn.bcl.garanbcl.model.Order;
 import vn.bcl.garanbcl.model.Suggestion;
-import vn.bcl.garanbcl.users.SmartFacebookUser;
-import vn.bcl.garanbcl.users.SmartGoogleUser;
-import vn.bcl.garanbcl.users.SmartUser;
 import vn.bcl.garanbcl.util.CheckInternetConnection;
 import vn.bcl.garanbcl.util.CircleAnimationUtil;
 import vn.bcl.garanbcl.util.Constants;
 import vn.bcl.garanbcl.util.MenuItemBadge;
-import vn.bcl.garanbcl.util.SmartLoginConfig;
-import vn.bcl.garanbcl.util.UserSession;
 import vn.bcl.likebutton.LikeButton;
 import vn.bcl.likebutton.OnAnimationEndListener;
 import vn.bcl.likebutton.OnLikeListener;
 
 public class MainActivity extends AppCompatActivity implements OnLikeListener, NavigationView.OnNavigationItemSelectedListener,
-        OnAnimationEndListener, ItemAdapter.IItemAdapterCallback, OrderAdapter.IOrderAdapterCallback{
+        OnAnimationEndListener, ItemAdapter.IItemAdapterCallback{
 
-    private UserSession session;
     private String primaryColor = "#DC143C";
     private String inactiveColor = "#000000";
     private String appBarTabColor = "#990000";
@@ -149,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
     private FloatingSearchView searchView;
     private List<Suggestion> mSuggestions =new ArrayList<>();
 
+    protected Firebase firebaseDB;
+    protected FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,11 +153,9 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         connected = new CheckInternetConnection(this);
         connected.checkConnection();
 
-        session = new UserSession(getApplicationContext());
-
         Firebase.setAndroidContext(this);
         String firebase_url = "https://ga-ran-bcl-d02e7.firebaseio.com/";
-        Firebase firebaseDB = new Firebase(firebase_url);
+        firebaseDB = new Firebase(firebase_url);
 
         ButterKnife.bind(this);
 
@@ -254,6 +248,23 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         setupDrawer();
         disableNavigationViewScrollbars(navigationView);
 
+        //set firebase logged in listener
+        setupfirebaseAuthListener();
+
+    }
+
+    //set firebase logged in listener
+    private void setupfirebaseAuthListener(){
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser == null)
+                    navigationView.getMenu().getItem(navigationView.getMenu().size() - 2).setVisible(false);
+                else
+                    navigationView.getMenu().getItem(navigationView.getMenu().size() - 2).setVisible(true);
+            }
+        });
     }
 
     //set corresponding views for variables
@@ -354,11 +365,10 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 connected.checkConnection();
-
                 //get position of selected tab
                 int pos = tab.getPosition();
                 if(pos == (tabLayout.getTabCount() - 1)){
-                    if(!session.isLoggedIn()){
+                    if(mAuth.getCurrentUser() == null){
                         final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(MainActivity.this)
                                 .setBackgroundColor(R.color.white)
                                 .setimageResource(R.drawable.logo)
@@ -371,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
                                     @Override
                                     public void OnClick(View view, Dialog dialog) {
                                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivityForResult(intent, Constants.LOGIN_REQUEST);
+                                        startActivityForResult(intent, Constants.REQUEST_CODE);
                                         }
                                 })
                                 .setNegativeButtonText(R.string.close_login_failed)
@@ -570,12 +580,6 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         addItemToCartAnimation(imageView, item, 1);
     }
 
-    @Override
-    public void onIncreaseDecreaseCallback() {
-//        updateOrderTotal();
-        updateBadge();
-    }
-
     private double getOrderTotal()
     {
         double total = 0.0;
@@ -669,6 +673,82 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
             }
         }
 
+        if(title.equals(getResources().getString(R.string.nav_help))){
+            //TODO: Help activity
+            slidingDrawer.closeDrawers();
+        }
+
+        if(title.equals(getResources().getString(R.string.nav_terms))){
+          //TODO: terms and conditions activity
+            slidingDrawer.closeDrawers();
+        }
+
+        if(title.equals(getResources().getString(R.string.nav_logout))){
+            final Toast logout_done = Toast.makeText(this, R.string.logout_succeeded, Toast.LENGTH_LONG);
+            final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(this)
+                    .setBackgroundColor(R.color.white)
+                    .setimageResource(R.drawable.logo)
+                    .setTextTitle(null)
+                    .setTextSubTitle(R.string.logout_confirm)
+                    .setBody(R.string.logout_question)
+                    .setPositiveButtonText(R.string.logout_ok)
+                    .setPositiveColor(R.color.colorPrimaryDark)
+                    .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
+                        @Override
+                        public void OnClick(View view, Dialog dialog) {
+                            mAuth.signOut();
+                            logout_done.show();
+                            tabLayout.getTabAt(0).select();
+                        }
+                    })
+                    .setNegativeButtonText(R.string.logout_cancel)
+                    .setNegativeColor(R.color.black)
+                    .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
+                        @Override
+                        public void OnClick(View view, Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setBodyGravity(FancyAlertDialog.TextGravity.CENTER)
+                    .setTitleGravity(FancyAlertDialog.TextGravity.CENTER)
+                    .setSubtitleGravity(FancyAlertDialog.TextGravity.CENTER)
+                    .setCancelable(false)
+                    .build();
+            alert.show();
+            slidingDrawer.closeDrawers();
+        }
+
+        if(title.equals(getResources().getString(R.string.nav_exit))){
+            final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(this)
+                    .setBackgroundColor(R.color.white)
+                    .setimageResource(R.drawable.logo)
+                    .setTextTitle(null)
+                    .setTextSubTitle(R.string.quit_confirm)
+                    .setBody(R.string.quit_question)
+                    .setPositiveButtonText(R.string.quit_ok)
+                    .setPositiveColor(R.color.colorPrimaryDark)
+                    .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
+                        @Override
+                        public void OnClick(View view, Dialog dialog) {
+                            System.exit(0);
+                        }
+                    })
+                    .setNegativeButtonText(R.string.quit_cancel)
+                    .setNegativeColor(R.color.black)
+                    .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
+                        @Override
+                        public void OnClick(View view, Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setBodyGravity(FancyAlertDialog.TextGravity.CENTER)
+                    .setTitleGravity(FancyAlertDialog.TextGravity.CENTER)
+                    .setSubtitleGravity(FancyAlertDialog.TextGravity.CENTER)
+                    .setCancelable(false)
+                    .build();
+            alert.show();
+        }
+
         slidingDrawer.closeDrawers();
         return false;
     }
@@ -699,6 +779,11 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
     private void setupDrawer() {
         navigationView.setNavigationItemSelectedListener(this);
         slidingDrawer.init(this, navigationView, getSupportActionBar());
+        if(mAuth.getCurrentUser() == null){
+            navigationView.getMenu().getItem(navigationView.getMenu().size()- 2).setVisible(false);
+        }else{
+            navigationView.getMenu().getItem(navigationView.getMenu().size()- 2).setVisible(true);
+        }
     }
 
     //press back button
@@ -727,28 +812,9 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
     //TODO: integrate FB login
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Constants.FACEBOOK_LOGIN_REQUEST){
-            SmartFacebookUser user;
-            try {
-                user = data.getParcelableExtra(Constants.USER);
-                //use this user object as per your requirement
-            }catch (Exception e){
-                Log.e(getClass().getSimpleName(), e.getMessage());
-            }
-        }else if(resultCode == Constants.GOOGLE_LOGIN_REQUEST){
-            SmartGoogleUser user;
-            try {
-                user = data.getParcelableExtra(Constants.USER);
-                //use this user object as per your requirement
-            }catch (Exception e){
-                Log.e(getClass().getSimpleName(), e.getMessage());
-            }
-        }else if(resultCode == Constants.CUSTOM_LOGIN_REQUEST){
-            SmartUser user = data.getParcelableExtra(Constants.USER);
-            //use this user object as per your requirement
-        }else if(resultCode == RESULT_CANCELED){
-            //Login Failed
-        }
+        if(mAuth.getCurrentUser() != null)
+            Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+        tabLayout.getTabAt(0).select();
     }
 
     //actions after liked a shine button
@@ -877,5 +943,9 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
             }
         }
         return suggestions;
+    }
+
+    public void setTab(int pos){
+        tabLayout.getTabAt(pos).select();
     }
 }

@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -22,14 +20,12 @@ import tyrantgit.explosionfield.ExplosionField;
 import vn.bcl.garanbcl.R;
 import vn.bcl.garanbcl.model.CartViewHolder;
 import vn.bcl.garanbcl.model.SingleProductModel;
-import vn.bcl.garanbcl.util.UserSession;
 
 
 public class CartFragment extends Fragment{
 
     private ExplosionField mExplosionField;
 
-    private UserSession session;
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mLayoutManager;
 
@@ -51,10 +47,6 @@ public class CartFragment extends Fragment{
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cart, container, false);
         mExplosionField = ExplosionField.attach2Window(getActivity());
-        session = new UserSession(getActivity().getApplicationContext());
-
-        //validating session
-        session.isLoggedIn();
 
         mRecyclerView = view.findViewById(R.id.rvCart);
         cartcollect = new ArrayList<>();
