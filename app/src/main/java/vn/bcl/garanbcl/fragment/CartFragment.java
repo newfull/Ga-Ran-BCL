@@ -21,7 +21,8 @@ import vn.bcl.garanbcl.R;
 import vn.bcl.garanbcl.model.CartViewHolder;
 import vn.bcl.garanbcl.model.SingleProductModel;
 
-
+//TODO: (possible: review the cart items layout)
+//TODO: add fixed toolbar for sum and checkout
 public class CartFragment extends Fragment{
 
     private ExplosionField mExplosionField;

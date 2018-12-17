@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import vn.bcl.garanbcl.R;
 
+//TODO: news fragment
 
 public class NewsFragment extends Fragment {
 

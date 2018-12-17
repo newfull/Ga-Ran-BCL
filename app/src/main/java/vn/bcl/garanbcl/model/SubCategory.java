@@ -2,6 +2,7 @@ package vn.bcl.garanbcl.model;
 
 import java.io.Serializable;
 
+//TODO: implement according to DB
 public class SubCategory implements Serializable
 {
     public int id;

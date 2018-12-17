@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by kshitij on 19/1/18.
  */
 
+//TODO: fix according to DB
 public class SingleProductModel implements Serializable {
 
     private int prid,no_of_items;

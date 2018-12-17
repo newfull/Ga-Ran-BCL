@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
 
         initData();
 
+        //TODO: arrange these to initializer()
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         searchView.setDismissFocusOnItemSelection(true);
 
@@ -504,6 +505,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
 
     private void dialogItemDetail(final Item item)
     {
+        //TODO: fix item detail dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         View view = getLayoutInflater().inflate(R.layout.dialog_item_detail, null);
 
@@ -580,18 +582,6 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         addItemToCartAnimation(imageView, item, 1);
     }
 
-    private double getOrderTotal()
-    {
-        double total = 0.0;
-
-        for (Order order : orderList)
-        {
-            total += order.extendedPrice;
-        }
-
-        return total;
-    }
-
     private void updateBadge()
     {
         if (orderList.size() == 0)
@@ -634,6 +624,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
 
     private void addItemToCart(Item item, int quantity)
     {
+        //TODO: redo Cartlist
         boolean isAdded = false;
 
         for (Order order : orderList)
@@ -809,7 +800,6 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         }
     }
 
-    //TODO: integrate FB login
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(mAuth.getCurrentUser() != null)
@@ -817,6 +807,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         tabLayout.getTabAt(0).select();
     }
 
+    //TODO: implement favorite item button
     //actions after liked a shine button
     @Override
     public void onAnimationEnd(LikeButton likeButton) {
@@ -869,7 +860,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
+        //TODO: MEnu button didn't work (open/close drawer)
         Log.e("PRESSED", String.valueOf(keyCode));
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (!slidingDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -907,6 +898,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         }
     }
 
+    //TODO: get item names to Suggestion list
     private void initData(){
         mSuggestions.add(new Suggestion("Ha Noi"));
         mSuggestions.add(new Suggestion("Ha nam"));

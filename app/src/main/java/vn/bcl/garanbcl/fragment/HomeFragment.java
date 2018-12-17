@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import vn.bcl.garanbcl.R;
 
+//TODO: populate popular items, design homepage
+
 class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
     private String[] mTitles;
     private LayoutInflater mInflater;
@@ -53,6 +55,7 @@ class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
         }
     }
 }
+
 
 public class HomeFragment extends Fragment {
 

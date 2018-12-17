@@ -24,7 +24,6 @@ import vn.bcl.garanbcl.adapter.ProfileAdapter;
 import vn.bcl.garanbcl.model.OnItemClickListener;
 import vn.bcl.garanbcl.model.ProfileModel;
 
-
 public class AccountFragment extends Fragment {
 
     protected FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -74,6 +73,7 @@ public class AccountFragment extends Fragment {
 
         checkLogin();
 
+        //TODO: fetch user info and bind
         recyclerview = view.findViewById(R.id.rvAccount);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerview.setLayoutManager(layoutManager);
@@ -122,38 +122,8 @@ public class AccountFragment extends Fragment {
                     alert.show();
                 }
                 else
-                if(item.getTxttrades().equals(txttrades[4])){
-                    final Toast logout_done = Toast.makeText(getActivity(), R.string.logout_succeeded, Toast.LENGTH_LONG);
-                    final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(getActivity())
-                            .setBackgroundColor(R.color.white)
-                            .setimageResource(R.drawable.logo)
-                            .setTextTitle(null)
-                            .setTextSubTitle(R.string.logout_confirm)
-                            .setBody(R.string.logout_question)
-                            .setPositiveButtonText(R.string.logout_ok)
-                            .setPositiveColor(R.color.colorPrimaryDark)
-                            .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
-                                @Override
-                                public void OnClick(View view, Dialog dialog) {
-                                    mAuth.signOut();
-                                    logout_done.show();
-                                    ((MainActivity) getActivity()).setTab(0);
-                                }
-                            })
-                            .setNegativeButtonText(R.string.logout_cancel)
-                            .setNegativeColor(R.color.black)
-                            .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
-                                @Override
-                                public void OnClick(View view, Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setBodyGravity(FancyAlertDialog.TextGravity.CENTER)
-                            .setTitleGravity(FancyAlertDialog.TextGravity.CENTER)
-                            .setSubtitleGravity(FancyAlertDialog.TextGravity.CENTER)
-                            .setCancelable(false)
-                            .build();
-                    alert.show();
+                {
+                    //TODO: start manager activity
                 }
 
 

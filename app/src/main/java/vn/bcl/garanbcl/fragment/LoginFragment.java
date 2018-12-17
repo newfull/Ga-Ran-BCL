@@ -67,6 +67,7 @@ public class LoginFragment extends Fragment{
     }
 
     private void setListeners() {
+        //TODO: FB Login
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +75,8 @@ public class LoginFragment extends Fragment{
             }
         });
 
+
+        //TODO: Google login
         googleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

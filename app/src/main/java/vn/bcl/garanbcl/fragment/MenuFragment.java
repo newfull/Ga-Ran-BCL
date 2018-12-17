@@ -30,41 +30,11 @@ import vn.bcl.garanbcl.model.SubCategory;
 
 public class MenuFragment extends Fragment{
 
-    private DrawerLayout drawer;
-
-    private RelativeLayout rlCart;
-
-    private TextView txtCount;
-
-    private TextView txtTotal;
-
-    private RecyclerView rvOrder;
-
-    private TextView txtClearAll;
-
-    private Button btnCompleteOrder;
-
-    private ProgressDialog dialog;
-
     private ArrayList<Category> categoryList;
-
-    /* Holds all sub-categories */
     private ArrayList<SubCategory> subCategoryList;
-
-    /* Holds all items*/
-
-
     private ArrayList<Item> itemList;
-
-    /* Holds all solutions */
-
-
     private ArrayList<Solution> solutionList;
-
-    /* Holds the data that are added to cart */
-
     private ArrayList<Order> orderList;
-
 
     public MenuFragment() {}
 
@@ -76,6 +46,7 @@ public class MenuFragment extends Fragment{
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_menu, container, false);
 
+        //TODO: get Data from DB to populate View!
         prepareData();
 
         // Get the ViewPager and set it's CategoryPagerAdapter so that it can display items
@@ -95,64 +66,6 @@ public class MenuFragment extends Fragment{
         }
 
         return view;
-    }
-
-    private void addItemToCart(Item item, int quantity)
-    {
-        boolean isAdded = false;
-
-        for (Order order : orderList)
-        {
-            if (order.item.id == item.id)
-            {
-                //if item already added to cart, dont add new order
-                //just add the quantity
-                isAdded = true;
-                order.quantity += quantity;
-                order.extendedPrice += item.unitPrice;
-                break;
-            }
-        }
-
-        //if item's not added yet
-        if (!isAdded)
-        {
-            orderList.add(new Order(item, quantity));
-        }
-
-        rvOrder.smoothScrollToPosition(orderList.size() - 1);
-        updateOrderTotal();
-        updateBadge();
-    }
-
-    private double getOrderTotal()
-    {
-        double total = 0.0;
-
-        for (Order order : orderList)
-        {
-            total += order.extendedPrice;
-        }
-
-        return total;
-    }
-
-    private void updateOrderTotal()
-    {
-        double total = getOrderTotal();
-        txtTotal.setText(String.format("%.2f", total));
-    }
-
-    private void updateBadge()
-    {
-        if (orderList.size() == 0)
-        {
-            txtCount.setVisibility(View.INVISIBLE);
-        } else
-        {
-            txtCount.setVisibility(View.VISIBLE);
-            txtCount.setText(String.valueOf(orderList.size()));
-        }
     }
 
     private void prepareData()

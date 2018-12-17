@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 
+//TODO: implement according to DB
 public class Category implements Serializable
 {
     public int id;
