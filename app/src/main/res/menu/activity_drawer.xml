@@ -1,37 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:elevation="0sp">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/cart"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/cart"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/cart"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/cart"
-            android:title="Tools" />
+    <group android:checkableBehavior="single"
+        android:id="@+id/dummy_group">
+        <item android:id="@+id/dummy_item"
+            tools:ignore="MenuTitle" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/cart"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/cart"
-                android:title="Send" />
-        </menu>
-    </item>
+    <group android:checkableBehavior="single"
+        android:id="@+id/main_function">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="@string/nav_home" />
+
+        <item
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/food"
+            android:title="@string/nav_menu" />
+
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/cart"
+            android:title="@string/nav_cart" />
+
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/fire"
+            android:title="@string/nav_news" />
+
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/user"
+            android:title="@string/nav_account" />
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/side_function">
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/help"
+            android:title="@string/nav_help" />
+
+        <item
+            android:id="@+id/nav_terms"
+            android:icon="@drawable/document"
+            android:title="@string/nav_terms" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout"
+            android:title="@string/nav_logout" />
+
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/exit"
+            android:title="@string/nav_exit" />
+
+    </group>
 
 </menu>

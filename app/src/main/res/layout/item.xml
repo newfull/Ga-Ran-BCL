@@ -26,7 +26,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imgThumbnail"
+                android:id="@+id/image_cartlist"
                 android:padding="@dimen/large_padding_size"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/card_image_height"/>

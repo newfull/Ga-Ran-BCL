@@ -1,0 +1,150 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/cardItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_size"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:padding="@dimen/normal_padding_size"
+    card_view:cardCornerRadius="@dimen/corner_radius"
+    card_view:cardElevation="@dimen/elevation"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="10dp">
+
+
+                <ImageView
+                    android:id="@+id/image_cartlist"
+                    android:layout_width="139dp"
+                    android:layout_height="139dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:maxHeight="139dp"
+                    android:maxWidth="139dp"
+                    android:minHeight="139dp"
+                    android:minWidth="139dp"
+                    android:padding="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/box" />
+
+                <TextView
+                    android:id="@+id/cart_prtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="40dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="Gà rán cay ơi là cayyyyyy"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.642"
+                    app:layout_constraintStart_toEndOf="@+id/image_cartlist"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/cart_prprice"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:text="29.000 đ"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.658"
+                    app:layout_constraintStart_toEndOf="@+id/image_cartlist"
+                    app:layout_constraintTop_toBottomOf="@+id/cart_prtitle" />
+
+                <me.himanshusoni.quantityview.QuantityView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cart_prcount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:fitsSystemWindows="false"
+                    android:gravity="center"
+                    android:requiresFadingEdge="none"
+                    app:layout_constrainedHeight="false"
+                    app:layout_constrainedWidth="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.683"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintRight_toRightOf="@+id/image_cartlist"
+                    app:layout_constraintStart_toEndOf="@+id/image_cartlist"
+                    app:layout_constraintTop_toBottomOf="@+id/cart_prprice"
+                    app:qv_addButtonBackground="@drawable/add_selector"
+                    app:qv_addButtonTextColor="@color/md_white_1000"
+                    app:qv_maxQuantity="150"
+                    app:qv_minQuantity="1"
+                    app:qv_quantity="1"
+                    app:qv_removeButtonBackground="@drawable/remove_selector"
+                    app:qv_removeButtonTextColor="@color/md_white_1000" />
+
+                <CheckBox
+                    android:id="@+id/item_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_name_height"
+            android:background="@color/colorAccent">
+
+
+            <ImageView
+                android:id="@+id/deletecard"
+                android:layout_width="@dimen/add_image_size"
+                android:layout_height="@dimen/add_image_size"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_size"
+                android:background="@drawable/add_item_bg"
+                android:padding="3dp"
+                android:src="@drawable/ic_delete" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

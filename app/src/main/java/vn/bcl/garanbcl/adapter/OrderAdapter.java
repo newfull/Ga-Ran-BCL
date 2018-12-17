@@ -16,10 +16,6 @@ import java.util.ArrayList;
 import vn.bcl.garanbcl.R;
 import vn.bcl.garanbcl.model.Order;
 
-/**
- * Created by brkckr on 6.12.2017.
- */
-
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder>
 {
     private ArrayList<Order> orderList;
@@ -44,7 +40,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         public OrderViewHolder(View view)
         {
             super(view);
-            imgThumbnail = view.findViewById(R.id.imgThumbnail);
+            imgThumbnail = view.findViewById(R.id.image_cartlist);
             txtItemName = view.findViewById(R.id.txtItemName);
             txtExtendedPrice = view.findViewById(R.id.txtExtendedPrice);
             txtQuantity = view.findViewById(R.id.txtQuantity);

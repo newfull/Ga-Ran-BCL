@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imgThumbnail"
+            android:id="@+id/image_cartlist"
             android:layout_width="@dimen/dialog_image_width"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@id/productView"
@@ -78,7 +78,7 @@
                 android:gravity="start|center"
                 android:paddingStart="@dimen/normal_padding_size"
                 android:paddingEnd="@dimen/normal_padding_size"
-                android:text="@string/multiplier"
+                android:text="*"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/normal_text_size"/>
 
@@ -125,7 +125,7 @@
             android:layout_weight="1"
             android:background="@drawable/sub_category_item"
             android:foreground="?android:attr/selectableItemBackground"
-            android:text="@string/back_to_vitrin"
+            android:text="NLHDC"
             android:textColor="@color/colorPrimary"/>
 
         <Button
@@ -136,7 +136,7 @@
             android:layout_weight="1"
             android:background="@drawable/sub_category_selected_item"
             android:foreground="?android:attr/selectableItemBackground"
-            android:text="@string/add_to_cart"
+            android:text="STNHMMLVML"
             android:textColor="@android:color/white"/>
 
     </LinearLayout>

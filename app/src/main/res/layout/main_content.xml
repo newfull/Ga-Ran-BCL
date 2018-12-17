@@ -2,6 +2,8 @@
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -10,8 +12,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayout"
@@ -28,30 +29,6 @@
                 android:src="@drawable/banner"
                 app:layout_collapseMode="parallax" />
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top|end"
-                android:orientation="horizontal"
-                app:layout_collapseMode="parallax">
-
-                <Button
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
-                    android:backgroundTintMode="src_in"
-                    android:drawableLeft="@drawable/com_facebook_button_send_icon_blue"
-                    android:fontFamily="sans-serif"
-                    android:text="Đăng nhập"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/dark_activityBackground"
-                    android:textColorHighlight="@android:color/transparent"
-                    android:textSize="16sp"
-                    android:typeface="sans" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="100dp"
@@ -71,6 +48,55 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="122dp"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                app:layout_collapseMode="parallax">
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/appbarTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="122dp"
+                    android:gravity="start"
+                    android:orientation="horizontal"
+                    app:layout_collapseMode="parallax">
+
+                    <com.flyco.tablayout.SlidingTabLayout
+                        android:id="@+id/tabLayoutAppBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="50dp"
+                        android:background="@android:color/transparent"
+                        app:layout_constraintEnd_toStartOf="@+id/searchAppBar"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintWidth_percent="80"
+                        tool:tl_indicator_height="35dp"
+                        tool:tl_indicator_margin_top="8dp"
+                        tool:tl_indicator_style="BLOCK"
+                        tool:tl_textSelectColor="@color/white"
+                        tool:tl_textUnselectColor="@color/white"
+                        tool:tl_textsize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/searchAppBar"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="11dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="50"
+                        tool:layout_constraintBottom_toBottomOf="parent"
+                        tool:layout_constraintTop_toTopOf="parent"
+                        tool:srcCompat="@drawable/ic_search" />
+
+                </android.support.constraint.ConstraintLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:layout_marginEnd="20dp"
@@ -81,8 +107,7 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/sliderViewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/sliderIndicator"
@@ -90,34 +115,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerInParent="true"
-                    app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp"
                     android:visibility="gone"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|end"
-                android:orientation="horizontal"
-                app:layout_collapseMode="parallax">
-
-                <Button
-                    android:id="@+id/btn_cart"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="64dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:backgroundTintMode="src_in"
-                    android:drawableLeft="@drawable/cart_toolbar"
-                    android:fontFamily="serif-monospace"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/dark_activityBackground"
-                    android:textColorHighlight="@android:color/transparent"
-                    android:textSize="20sp"
-                    android:typeface="normal" />
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
@@ -130,23 +130,27 @@
 
                 <LinearLayout
                     android:id="@+id/toolbar_name_bcl"
-                    android:layout_height="match_parent"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="start"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
+
                     <RelativeLayout
+                        android:layout_width="107dp"
                         android:layout_height="match_parent"
-                        android:layout_width="139sp"
                         android:gravity="start"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="9.5sp"
-                            android:layout_marginTop="9.5sp"
+                            android:layout_width="107dp"
+                            android:layout_height="30dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="15dp"
+                            android:maxHeight="24dp"
+                            android:maxWidth="86dp"
+                            android:visibility="visible"
                             app:srcCompat="@drawable/app_name_bcl" />
+
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -155,20 +159,14 @@
                         android:gravity="top|end"
                         android:orientation="horizontal">
 
-                        <Button
-                            style="?android:attr/borderlessButtonStyle"
-                            android:layout_width="64dp"
-                            android:layout_height="60dp"
-                            android:backgroundTint="@android:color/transparent"
-                            android:backgroundTintMode="src_in"
-                            android:drawableLeft="@drawable/cart_toolbar"
-                            android:fontFamily="serif-monospace"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/dark_activityBackground"
-                            android:textColorHighlight="@android:color/transparent"
-                            android:textSize="20sp"
-                            android:typeface="normal" />
+                        <TextSwitcher
+                            android:id="@+id/tab_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="14dp"
+                            android:maxLines="1" />
                     </RelativeLayout>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
@@ -182,7 +180,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </android.support.v4.view.ViewPager>
 
@@ -199,5 +197,24 @@
         app:tabIndicatorGravity="top"
         app:tabIndicatorHeight="4dp"
         app:tabMode="fixed" />
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_leftActionMode="noLeftAction"
+        app:floatingSearch_searchBarMarginLeft="5dp"
+        app:floatingSearch_searchBarMarginRight="5dp"
+        app:floatingSearch_searchBarMarginTop="5dp"
+        app:floatingSearch_searchHint="@string/prompt_search"
+        app:floatingSearch_showMenuAction="false"
+        app:floatingSearch_showSearchKey="true"
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp"
+        app:floatingSearch_dismissOnOutsideTouch="true"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

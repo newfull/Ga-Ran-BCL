@@ -4,12 +4,15 @@ package vn.bcl.garanbcl.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import vn.bcl.garanbcl.MainActivity;
 import vn.bcl.garanbcl.R;
 import vn.bcl.garanbcl.adapter.ItemAdapter;
 import vn.bcl.garanbcl.adapter.SubCategoryAdapter;
@@ -19,25 +22,21 @@ import vn.bcl.garanbcl.util.TopGridLayoutManager;
 import vn.bcl.garanbcl.util.TopLinearLayoutManager;
 
 
-/**
- * Created by brkckr on 28.10.2017.
- */
-
 public class ItemFragment extends Fragment implements SubCategoryAdapter.ISubCategoryAdapterItemCallback
 {
     public static final String SOLUTION = "SOLUTION";
-
-    /*
+/*
      * Holds the position of the selected sub-category.
      * Change the selected sub-category index
      * by rvItem's scrolling up or down.
      */
+
     private int selectedSubCategoryPosition = 0;
 
-    /*
-     * A solution has all the data needed to populate
+   /*  * A solution has all the data needed to populate
      * the RecyclerViews for the sub-categories and items.
-     */
+    */
+
     public Solution solution;
 
     private SubCategoryAdapter subCategoryAdapter;
@@ -110,6 +109,7 @@ public class ItemFragment extends Fragment implements SubCategoryAdapter.ISubCat
 
                 if (firstCompleteleyVisibleItemPosition >= 0)
                 {
+
                     // current selected sub-category position
                     int position = getSectionIdByItemPosition(firstCompleteleyVisibleItemPosition);
 
@@ -133,6 +133,7 @@ public class ItemFragment extends Fragment implements SubCategoryAdapter.ISubCat
                         rvSubCategory.smoothScrollToPosition(position);
                     }
                 }
+
             }
 
             @Override
@@ -144,12 +145,12 @@ public class ItemFragment extends Fragment implements SubCategoryAdapter.ISubCat
 
         return v;
     }
-
-    /*
+/*
      * Gets the item position for smooth scroll
      *
      * Want to smooth scroll to the first item of sub-category which is selected
      */
+
     private int calculateAbsolutePosition(int selectedSubCategoryPosition)
     {
         int absolutePosition = 0;
@@ -171,12 +172,12 @@ public class ItemFragment extends Fragment implements SubCategoryAdapter.ISubCat
 
         return absolutePosition;
     }
-
-    /*
+/*
      * Gets section id by first completely visible item position
      *
      * Changing the selected subcategory according to Recyclerview's status
      */
+
     private int getSectionIdByItemPosition(int firstCompletelyVisibleItemPosition)
     {
         int section = -1;

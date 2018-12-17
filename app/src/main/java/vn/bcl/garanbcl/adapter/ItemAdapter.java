@@ -18,14 +18,6 @@ import vn.bcl.garanbcl.R;
 import vn.bcl.garanbcl.model.Item;
 import vn.bcl.garanbcl.model.Solution;
 
-/**
- * Created by brkckr on 28.10.2017.
- */
-
-/**
- * @author Aidan Follestad (afollestad)
- */
-
 public class ItemAdapter extends SectionedRecyclerViewAdapter<ItemAdapter.ItemViewHolder>
 {
     private Solution solution;
@@ -160,7 +152,7 @@ public class ItemAdapter extends SectionedRecyclerViewAdapter<ItemAdapter.ItemVi
         {
             super(itemView);
             this.txtItemName = itemView.findViewById(R.id.txtItemName);
-            this.imgThumbnail = itemView.findViewById(R.id.imgThumbnail);
+            this.imgThumbnail = itemView.findViewById(R.id.image_cartlist);
             this.imgAdd = itemView.findViewById(R.id.imgAdd);
             this.txtPrice = itemView.findViewById(R.id.txtPrice);
             this.txtSectionTitle = itemView.findViewById(R.id.txtSectionTitle);

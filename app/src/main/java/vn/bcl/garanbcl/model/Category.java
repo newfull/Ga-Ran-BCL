@@ -1,5 +1,9 @@
 package vn.bcl.garanbcl.model;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 
 public class Category implements Serializable
@@ -13,5 +17,6 @@ public class Category implements Serializable
         this.id = id;
         this.name = name;
         this.resourceId = resourceId;
+
     }
 }

@@ -6,33 +6,63 @@
     <string name="fb_login_protocol_scheme">fb220513355524480</string>
     <string name="title_activity_login">Đăng nhập</string>
 
+    <string name="noconnection">Hãy kết nối Wifi hoặc mạng di động để tiếp tục...</string>
+    <string name="connection_not_found">Chưa kết nối</string>
+    <string name="cannot_connect">Không thể tìm thấy mạng</string>
+    <string name="connect_now">Cài đặt</string>
+    <string name="quit_app">Thoát</string>
+
+    <string name="new_user">Chưa có tài khoản?</string>
+    <string name="sign_up_now">Đăng ký ngay</string>
+    <string name="old_user">Đã có tài khoản?</string>
+    <string name="log_in_now">Đăng nhập ngay</string>
+
     <!-- Strings related to login -->
+    <string name="prompt_name">Họ tên</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="prompt_password">Mật khẩu</string>
+    <string name="prompt_repassword">Nhập lại mật khẩu</string>
+    <string name="action_sign_in">Đăng nhập</string>
+    <string name="action_sign_up">Đăng ký</string>
+    <string name="action_sign_in_short">Đăng nhập</string>
+    <string name="action_sign_up_short">Đăng ký</string>
+    <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="error_invalid_password">Mật khẩu không hợp lệ</string>
+    <string name="error_short_password">Mật khẩu phải từ 6-20 kí tự</string>
+    <string name="error_incorrect_password">Mật khẩu sai</string>
+    <string name="error_repassword">Xác nhận mật khẩu chưa đúng</string>
+    <string name="error_field_required">Đây là trường bắt buộc</string>
+    <string name="permission_rationale">"Cần quyền truy cập vào Danh bạ để gợi ý Email</string>
+    <string name="login_title">ĐĂNG NHẬP</string>
+    <string name="login_desc">Đăng nhập để tiếp tục</string>
+    <string name="login_forgot">Quên mật khẩu?</string>
+    <string name="sign_in_facebook">Đăng nhập với Facebook</string>
+    <string name="sign_in_google">Đăng nhập với Google</string>
+    <string name="loading_holder">Xin hãy đợi...</string>
+    <string name="logging_holder">Đang đăng nhập...</string>
+    <string name="getting_data">Lấy thông tin</string>
+    <string name="password_mismatch">Thông tin chưa khớp</string>
+    <string name="login_failed">Đăng nhập thất bại</string>
+    <string name="login_failed_desc">Mật khẩu hoặc Email không đúng</string>
 
-    <string name="cart_detail">CART DETAIL</string>
-    <string name="clear_all">Clear All</string>
-    <string name="complete_order">COMPLETE ORDER</string>
-    <string name="multiplier">X</string>
-    <string name="back_to_vitrin">BACK TO VITRIN</string>
-    <string name="add_to_cart">ADD TO CART</string>
-    <string name="plus">+</string>
-    <string name="minus">-</string>
-    <string name="delete_all_orders">Are you sure you want to delete all orders?</string>
-    <string name="complete_order_question">"Are you sure you want to complete order?</string>
-    <string name="cart_clean">Your cart is as clean as the first day.</string>
-    <string name="sent_order">Your order has been successfully completed. :)</string>
-    <string name="failed_order">Something went wrong. :(</string>
-    <string name="sending_order">Your order is being completed, please wait.</string>
+    <string name="signup_title">ĐĂNG KÝ</string>
+    <string name="signup_desc">Đăng ký một tài khoản mới</string>
 
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="no_user">=========</string>
+    <string name="user_not_found">Chưa đăng nhập</string>
+    <string name="please_login">Bạn cần phải đăng nhập để truy cập vào trang này</string>
+    <string name="close_login_failed">Đóng</string>
+    <string name="login_now">Đăng nhập ngay</string>
+
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_menu">Thực đơn</string>
+    <string name="nav_cart">Giỏ hàng</string>
+    <string name="nav_news">Tin tức</string>
+    <string name="nav_account">Tài khoản</string>
+    <string name="nav_help">Trợ giúp</string>
+    <string name="nav_terms">Điều khoản sử dụng</string>
+    <string name="nav_logout">Đăng xuất</string>
+    <string name="nav_exit">Thoát</string>
+
+    <string name="prompt_search">Nhập vào tên sản phẩm</string>
 </resources>

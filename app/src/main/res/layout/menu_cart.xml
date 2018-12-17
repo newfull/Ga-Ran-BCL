@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/rlCart"
-                style="@android:style/Widget.ActionButton"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackgroundBorderless"
-                android:orientation="vertical"
-                android:padding="5dp">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlCart"
+    android:layout_width="60dp"
+    android:layout_height="48dp"
+    android:background="@null"
+    android:clickable="true"
+    android:focusable="true"
+    android:minHeight="48dp"
+    android:minWidth="48dp">
 
     <ImageView
-        android:id="@+id/imgCart"
+        android:id="@+id/menu_badge_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginEnd="8dp"
+        android:scaleType="center"
+        android:src="@drawable/cart_toolbar"
+        android:tint="@android:color/white" />
+
+    <vn.bcl.garanbcl.util.MaterialBadgeTextView
+        android:id="@+id/menu_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:background="#EF4738"
+        android:ellipsize="none"
         android:gravity="center"
-        android:src="@drawable/cart_toolbar"/>
-
-    <TextView android:id="@+id/txtCount"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="@dimen/badge_size"
-              android:layout_height="@dimen/badge_size"
-              android:layout_alignParentEnd="true"
-              android:layout_alignTop="@+id/imgCart"
-              android:background="@drawable/cart_count"
-              android:gravity="center"
-              android:textColor="@android:color/white"
-              android:textSize="@dimen/small_text_size"
-              android:visibility="gone"/>
-
-</RelativeLayout>
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+</FrameLayout>

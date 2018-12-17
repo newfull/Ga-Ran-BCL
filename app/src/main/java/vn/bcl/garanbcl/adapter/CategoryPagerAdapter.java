@@ -18,12 +18,12 @@ import vn.bcl.garanbcl.fragment.ItemFragment;
 import vn.bcl.garanbcl.model.Solution;
 
 /**
- * Created by brkckr on 28.10.2017.
- *
  * CategoryPagerAdapter represents each page as a Fragment that is persistently
  * kept in the fragment manager as long as the user
  * can return to the page.
- */
+ * */
+
+
 
 public class CategoryPagerAdapter extends FragmentPagerAdapter
 {
