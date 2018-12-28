@@ -52,11 +52,18 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.geniusforapp.fancydialog.FancyAlertDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.steelkiwi.library.IncrementProductView;
 import com.steelkiwi.library.listener.OnStateListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -65,8 +72,12 @@ import live.utkarshdev.maincontentslidingnavview.ContentSlidingDrawerLayout;
 import vn.bcl.garanbcl.adapter.ItemAdapter;
 import vn.bcl.garanbcl.adapter.SliderAdapter;
 import vn.bcl.garanbcl.adapter.TabAdapter;
+import vn.bcl.garanbcl.fragment.HomeFragment;
+import vn.bcl.garanbcl.fragment.MenuFragment;
+import vn.bcl.garanbcl.model.Category;
 import vn.bcl.garanbcl.model.Item;
 import vn.bcl.garanbcl.model.Order;
+import vn.bcl.garanbcl.model.SubCategory;
 import vn.bcl.garanbcl.model.Suggestion;
 import vn.bcl.garanbcl.util.CheckInternetConnection;
 import vn.bcl.garanbcl.util.CircleAnimationUtil;
@@ -76,8 +87,8 @@ import vn.bcl.likebutton.LikeButton;
 import vn.bcl.likebutton.OnAnimationEndListener;
 import vn.bcl.likebutton.OnLikeListener;
 
-public class MainActivity extends AppCompatActivity implements OnLikeListener, NavigationView.OnNavigationItemSelectedListener,
-        OnAnimationEndListener, ItemAdapter.IItemAdapterCallback{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        ItemAdapter.IItemAdapterCallback{
 
     private String primaryColor = "#DC143C";
     private String inactiveColor = "#000000";
@@ -85,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
 
     private Activity context;
     private TabAdapter tabAdapter;
-    private TabLayout tabLayout;
+    private static TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
     private AppBarLayout appBarLayout;
@@ -154,8 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         connected.checkConnection();
 
         Firebase.setAndroidContext(this);
-        String firebase_url = "https://ga-ran-bcl-d02e7.firebaseio.com/";
-        firebaseDB = new Firebase(firebase_url);
+        firebaseDB = new Firebase(Constants.firebase_url);
 
         ButterKnife.bind(this);
 
@@ -203,7 +213,8 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 Suggestion suggestion= (Suggestion) searchSuggestion;
-                Toast.makeText(getApplicationContext(),"Ban vua chon "+suggestion.getName(),Toast.LENGTH_SHORT).show();
+                setTab(1);
+                dialogItemDetail(suggestion.getItem());
             }
 
             @Override
@@ -224,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
     }
 
     private void initializer() {
-        bindViews();
+        bindViews(); 
 
         //set up tabs
         setFragments();
@@ -503,8 +514,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         dialogItemDetail(item);
     }
 
-    private void dialogItemDetail(final Item item)
-    {
+    public void dialogItemDetail(final Item item) {
         //TODO: fix item detail dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         View view = getLayoutInflater().inflate(R.layout.dialog_item_detail, null);
@@ -515,13 +525,16 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         final TextView txtExtendedPrice = (TextView) view.findViewById(R.id.txtExtendedPrice);
         final TextView txtQuantity = (TextView) view.findViewById(R.id.txtQuantity);
         final ImageView imgThumbnail = (ImageView) view.findViewById(R.id.image_cartlist);
+        final LikeButton btnShare = (LikeButton) view.findViewById(R.id.btnShare);
+        final LikeButton btnFav = (LikeButton) view.findViewById(R.id.btnFav);
+        final LikeButton btnClose = (LikeButton) view.findViewById(R.id.btnClose);
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
 
         txtItemName.setText(item.name);
-        txtUnitPrice.setText(String.format("%.2f", item.unitPrice));
+        txtUnitPrice.setText(String.format("%.0f", item.unitPrice) + " VNĐ");
         txtQuantity.setText("1");
-        txtExtendedPrice.setText(String.format("%.2f", item.unitPrice * 1));
+        txtExtendedPrice.setText(String.format("%.0f", item.unitPrice * 1)  + " VNĐ");
 
         builder.setView(view);
         final AlertDialog dialog = builder.create();
@@ -540,13 +553,41 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
             public void onCountChange(int count)
             {
                 txtQuantity.setText(String.valueOf(count));
-                txtExtendedPrice.setText(String.format("%.2f", item.unitPrice * count));
+                txtExtendedPrice.setText(String.format("%.0f", item.unitPrice * count) + " VNĐ");
             }
 
             @Override
             public void onConfirm(int count)
             {
+                final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(MainActivity.this)
+                        .setBackgroundColor(R.color.white)
+                        .setimageResource(R.drawable.logo)
+                        .setTextTitle("----------------")
+                        .setTextSubTitle(R.string.item_add_to_cart)
+                        .setBody(R.string.item_add_to_cart_desc)
+                        .setPositiveButtonText(R.string.item_add_to_cart_now)
+                        .setPositiveColor(R.color.colorPrimaryDark)
+                        .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
+                            @Override
+                            public void OnClick(View view, Dialog dialog) {
 
+                            }
+                        })
+                        .setNegativeButtonText(R.string.item_add_to_cart_cancel)
+                        .setNegativeColor(R.color.black)
+                        .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
+                            @Override
+                            public void OnClick(View view, Dialog dialog) {
+                                txtQuantity.setText(String.valueOf(1));
+                                txtExtendedPrice.setText(String.format("%.0f", item.unitPrice * 1));
+                            }
+                        })
+                        .setBodyGravity(FancyAlertDialog.TextGravity.CENTER)
+                        .setTitleGravity(FancyAlertDialog.TextGravity.CENTER)
+                        .setSubtitleGravity(FancyAlertDialog.TextGravity.CENTER)
+                        .setCancelable(false)
+                        .build();
+                alert.show();
             }
 
             @Override
@@ -575,6 +616,45 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
                 dialog.dismiss();
             }
         });
+
+        btnClose.setOnLikeListener(new OnLikeListener(){
+
+            @Override
+            public void liked(LikeButton likeButton) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+            }
+        });
+
+        btnFav.setOnLikeListener(new OnLikeListener(){
+
+            @Override
+            public void liked(LikeButton likeButton) {
+
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+            }
+        });
+
+        btnShare.setOnLikeListener(new OnLikeListener(){
+
+            @Override
+            public void liked(LikeButton likeButton) {
+
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+            }
+        });
     }
 
     @Override
@@ -582,8 +662,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         addItemToCartAnimation(imageView, item, 1);
     }
 
-    private void updateBadge()
-    {
+    private void updateBadge() {
         if (orderList.size() == 0)
         {
             MenuItemBadge.getBadgeTextView(menuItemMessage).setBadgeCount(0, true);
@@ -593,8 +672,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         }
     }
 
-    private void addItemToCartAnimation(ImageView targetView, final Item item, final int quantity)
-    {
+    private void addItemToCartAnimation(ImageView targetView, final Item item, final int quantity) {
         FrameLayout destView = findViewById(R.id.rlCart);
 
         new CircleAnimationUtil().attachActivity(MainActivity.this).setTargetView(targetView).setMoveDuration(300).setDestView(destView).setAnimationListener(new Animator.AnimatorListener()
@@ -622,9 +700,7 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         }).startAnimation();
     }
 
-    private void addItemToCart(Item item, int quantity)
-    {
-        //TODO: redo Cartlist
+    private void addItemToCart(Item item, int quantity) {
         boolean isAdded = false;
 
         for (Order order : orderList)
@@ -646,10 +722,11 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
             orderList.add(new Order(item, quantity));
         }
 
-       /* orderAdapter.notifyDataSetChanged();
-        rvOrder.smoothScrollToPosition(orderList.size() - 1);
-        updateOrderTotal();*/
         updateBadge();
+    }
+
+    private void addItemToFav(Item item) {
+        //TODO: redo Favlist
     }
 
     @Override
@@ -744,7 +821,6 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         return false;
     }
 
-
     //Timer for image slide on appbar
     private class SliderTimer extends TimerTask {
         @Override
@@ -805,25 +881,6 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         if(mAuth.getCurrentUser() != null)
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
         tabLayout.getTabAt(0).select();
-    }
-
-    //TODO: implement favorite item button
-    //actions after liked a shine button
-    @Override
-    public void onAnimationEnd(LikeButton likeButton) {
-
-    }
-
-    //actions after liked a shine button
-    @Override
-    public void liked(LikeButton likeButton) {
-
-    }
-
-    //actions on unlike a shine button
-    @Override
-    public void unLiked(LikeButton likeButton) {
-
     }
 
     @Override
@@ -898,32 +955,143 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         }
     }
 
-    //TODO: get item names to Suggestion list
     private void initData(){
-        mSuggestions.add(new Suggestion("Ha Noi"));
-        mSuggestions.add(new Suggestion("Ha nam"));
-        mSuggestions.add(new Suggestion("Da nang"));
-        mSuggestions.add(new Suggestion("Dong nai"));
-        mSuggestions.add(new Suggestion("Phú Tho"));
-        mSuggestions.add(new Suggestion("Quang ngai"));
-        mSuggestions.add(new Suggestion("Thanh hoa"));
-        mSuggestions.add(new Suggestion("Hue"));
-        mSuggestions.add(new Suggestion("Ha Noi"));
-        mSuggestions.add(new Suggestion("Ha nam"));
-        mSuggestions.add(new Suggestion("Da nang"));
-        mSuggestions.add(new Suggestion("Dong nai"));
-        mSuggestions.add(new Suggestion("Phú Tho"));
-        mSuggestions.add(new Suggestion("Quang ngai"));
-        mSuggestions.add(new Suggestion("Thanh hoa"));
-        mSuggestions.add(new Suggestion("Hue"));
-        mSuggestions.add(new Suggestion("Ha Noi"));
-        mSuggestions.add(new Suggestion("Ha nam"));
-        mSuggestions.add(new Suggestion("Da nang"));
-        mSuggestions.add(new Suggestion("Dong nai"));
-        mSuggestions.add(new Suggestion("Phú Tho"));
-        mSuggestions.add(new Suggestion("Quang ngai"));
-        mSuggestions.add(new Suggestion("Thanh hoa"));
-        mSuggestions.add(new Suggestion("Hue"));
+        /*List<Category> cats = new ArrayList<Category>();
+        cats.add(new Category(0, "Tất cả", "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/hot-dish.png?alt=media&token=d352850f-a954-4b78-9563-bfb93267d2a1"));
+        cats.add(new Category(1, "Gà rán", "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/chicken-bucket.png?alt=media&token=716687fd-19f4-426d-a9c6-d3abd6a26475"));
+        cats.add(new Category(2, "Burger & cơm", "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/sandwich.png?alt=media&token=4d22cc04-08ac-4ede-805d-99a8787dddf6"));
+        cats.add(new Category(3, "Thức ăn nhẹ", "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/french-fries.png?alt=media&token=6c4d4b16-3e16-40eb-96e0-3353c37277e4"));
+        cats.add(new Category(4, "Thức uống & tráng miệng", "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/drink.png?alt=media&token=7a530e9e-f39c-4575-b7ca-47d703872126"));
+
+        List<SubCategory> subcat1 = new ArrayList<SubCategory>();
+        subcat1.add(new SubCategory(1, 1, "Gà miếng"));
+        subcat1.add(new SubCategory(2, 1, "Gà phần"));
+
+        List<SubCategory> subcat2 = new ArrayList<SubCategory>();
+        subcat2.add(new SubCategory(3, 2, "Cơm"));
+        subcat2.add(new SubCategory(4, 2, "Hamburger"));
+
+        List<SubCategory> subcat3 = new ArrayList<SubCategory>();
+        subcat3.add(new SubCategory(5, 3, "Món chiên"));
+        subcat3.add(new SubCategory(6, 3, "Khoai tây chiên"));
+        subcat3.add(new SubCategory(7, 3, "Salad"));
+
+        List<SubCategory> subcat4 = new ArrayList<SubCategory>();
+        subcat4.add(new SubCategory(8, 4, "Thức uống"));
+        subcat4.add(new SubCategory(9, 4, "Kem"));
+        subcat4.add(new SubCategory(10, 4, "Bánh ngọt"));
+
+        List<List<SubCategory>> subcats = new ArrayList<List<SubCategory>>();
+        subcats.add(subcat1);
+        subcats.add(subcat2);
+        subcats.add(subcat3);
+        subcats.add(subcat4);
+
+        List<Item> item1_1 = new ArrayList<Item>();
+        item1_1.add(new Item(1, 1, 1, "Gà giòn cay", 25000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/be064003a56beabc4304bb9de7d63117.JPG?alt=media&token=e73a180e-e83b-45bd-908b-a7b0b18d3ba1"));
+        item1_1.add(new Item(2, 1, 1, "Gà truyền thống", 23000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/be064003a56beabc4304bb9de7d63117.JPG?alt=media&token=e73a180e-e83b-45bd-908b-a7b0b18d3ba1"));
+        item1_1.add(new Item(3, 1, 1, "Gà quay tiêu", 50000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/8a6f957ff760d860bee9f0e9f5194891.jpg?alt=media&token=426e77c4-35ba-4202-9db9-7ab1aa394924"));
+
+        List<Item> item1_2 = new ArrayList<Item>();
+        item1_2.add(new Item(4, 1, 2, "Gà giòn cay (3 miếng)", 69000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/b0914223717890b6e022cdda5bbf9157.JPG?alt=media&token=7bd3b8c4-eef8-41c4-b73d-18f1b9feaf70"));
+        item1_2.add(new Item(5, 1, 2, "Gà giòn cay (6 miếng)", 135000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/55e4aa27e3d2101a72871728c609f3fd.JPG?alt=media&token=4e8bb056-3021-461c-91ed-8caec12c461a"));
+
+        List<Item> item2_3 = new ArrayList<Item>();
+        item2_3.add(new Item(6, 2, 3, "Cơm gà giòn cay", 37000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/8b858b57c3fc228c84da80d852f6a533.jpg?alt=media&token=408967f1-61d5-4a9f-ab6e-fe00a31a185e"));
+        item2_3.add(new Item(7, 2, 3, "Cơm gà truyền thống", 35000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/34e7d33183130c8d86cb6a18ad5b899a.jpg?alt=media&token=b1e58bcc-cae0-4ad0-8482-0521a4a41a4d"));
+
+        List<Item> item2_4 = new ArrayList<Item>();
+        item2_4.add(new Item(8, 2, 4, "Burger Zinger", 37000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/14fbac8736ec4188209a9f8996747e57.jpg?alt=media&token=65ef7420-23c5-4a04-9101-1443e2d8e8f3"));
+        item2_4.add(new Item(9, 2, 4, "Burger Tôm", 35000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/0786da34d00e9f2f72c293e4faa332f2.jpg?alt=media&token=8eb7a794-4b0c-4a05-a991-8eed2e06995c"));
+
+        List<Item> item3_5 = new ArrayList<Item>();
+        item3_5.add(new Item(10, 3, 5, "Phô mai que", 15000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/resize.png?alt=media&token=d1f55d39-0092-4e11-9b12-ae031d2f46d9"));
+        item3_5.add(new Item(11, 3, 5, "Thanh cá", 20000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/1984c78778bc8623a9bb91bc5a05821f.jpg?alt=media&token=11055942-5dbc-458e-8c31-5d585996856b"));
+
+        List<Item> item3_6 = new ArrayList<Item>();
+        item3_6.add(new Item(12, 3, 6, "Khoai tây chiên (Vừa)", 18000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/resize%20(1).png?alt=media&token=732bfec5-828a-40c0-b74e-e72a29739d83"));
+
+        List<Item> item3_7 = new ArrayList<Item>();
+        item3_7.add(new Item(13, 3, 7, "Salad rau quả", 26000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/49c2e866c16eb3-phananphu042.png?alt=media&token=1f311f69-235b-48af-9bcd-80df524b4d84"));
+
+        List<Item> item4_8 = new ArrayList<Item>();
+        item4_8.add(new Item(14, 4, 8, "Pepsi (Vừa)", 10000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/8b858b57c3fc228c84da80d852f6a533.jpg?alt=media&token=408967f1-61d5-4a9f-ab6e-fe00a31a185e"));
+
+        List<Item> item4_9 = new ArrayList<Item>();
+        item4_9.add(new Item(15, 4, 9, "Kem Vani", 5000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/813f69a38f29337488f0d30dcc299bd5.jpg?alt=media&token=139fdc72-8b9e-4a7d-a95a-062820971cec"));
+        item4_9.add(new Item(16, 4, 9, "Kem Vani phủ Socola", 8000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/1370dddff397feb477c13cf007cad409.jpg?alt=media&token=35c09de8-37c4-4ac7-824f-479985f51d11"));
+
+        List<Item> item4_10 = new ArrayList<Item>();
+        item4_10.add(new Item(17, 4, 10, "Bánh trứng nướng", 5000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/6b5e6fa66b96309a58d6eec9bba9a888.jpg?alt=media&token=f343271c-29ff-4610-8fed-026fb435b1d1"));
+        item4_10.add(new Item(18, 4, 10, "Mashies Rau củ", 12000, "https://firebasestorage.googleapis.com/v0/b/ga-ran-bcl-d02e7.appspot.com/o/40fb89b75a656b0eb25b960acf531463.png?alt=media&token=f10c913a-9bdc-49e0-96af-8dc42f1a1f6a"));
+
+        List<List<Item>> items = new ArrayList<List<Item>>();
+        items.add(item1_1);
+        items.add(item1_2);
+        items.add(item2_3);
+        items.add(item2_4);
+        items.add(item3_5);
+        items.add(item3_6);
+        items.add(item3_7);
+        items.add(item4_8);
+        items.add(item4_9);
+        items.add(item4_10);
+
+
+        Firebase sudo = firebaseDB.child("thuc-don");
+        String folder = sudo.push().getKey();
+        Category temp = cats.get(0);
+        sudo.child(folder).child("desc").setValue(temp);
+
+        int k = 1;
+        while(k < 5) {
+            Firebase wd = firebaseDB.child("thuc-don");
+            String key = wd.push().getKey();
+            Category tempcat = cats.get(k++);
+            wd.child(key).child("desc").setValue(tempcat);
+
+            int p = 0;
+            while(p < subcats.get(tempcat.id - 1).size()) {
+                wd = firebaseDB.child("thuc-don").child(key);
+                String subkey = wd.push().getKey();
+                SubCategory tempsubcat = subcats.get(tempcat.id - 1).get(p++);
+                wd.child(subkey).child("desc").setValue(tempsubcat);
+
+                int l = 0;
+                while(l < items.get(tempsubcat.id - 1).size()) {
+                    wd = firebaseDB.child("thuc-don").child(key).child(subkey);
+                    String itemkey = wd.push().getKey();
+                    wd.child(itemkey).child("desc").setValue(items.get(tempsubcat.id - 1).get(l++));
+                }
+            }
+
+        }*/
+
+        FirebaseDatabase mDB = FirebaseDatabase.getInstance();
+        DatabaseReference root = mDB.getReference("thuc-don");
+
+        root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot cats : dataSnapshot.getChildren()) {
+                    for (DataSnapshot subcats : cats.getChildren()) {
+                        if (!subcats.getKey().equals("desc")) {
+                            for (DataSnapshot items : subcats.getChildren()) {
+                                if (!items.getKey().equals("desc")) {
+                                    mSuggestions.add(new Suggestion(items.child("desc").getValue(Item.class)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
 
     }
 
@@ -937,7 +1105,12 @@ public class MainActivity extends AppCompatActivity implements OnLikeListener, N
         return suggestions;
     }
 
-    public void setTab(int pos){
+    public static void setTab(int pos){
         tabLayout.getTabAt(pos).select();
+    }
+
+    public void setMenuPage(int catId){
+        ((MenuFragment) tabAdapter.getItem(1)).changeTab(catId);
+        setTab(1);
     }
 }

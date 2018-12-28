@@ -77,4 +77,19 @@
     <string name="nav_exit">Thoát</string>
 
     <string name="prompt_search">Nhập vào tên sản phẩm</string>
+
+    <string name="item_multiply">*</string>
+    <string name="item_equal">=</string>
+    <string name="item_back">Đóng</string>
+    <string name="item_add_to_cart">Thêm vào giỏ</string>
+    <string name="item_add_to_cart_desc">Thêm sản phẩm này vào giỏ?</string>
+    <string name="item_add_to_cart_now">Thêm</string>
+    <string name="item_add_to_cart_cancel">Hủy</string>
+
+    <string name="cart_sum">Tổng tiền:</string>
+    <string name="cart_discount">Khuyến mãi (10%):</string>
+    <string name="cart_total">Tổng thanh toán:</string>
+    <string name="cart_checkout">ĐẶT HÀNG NGAY</string>
+
+    <string name="popular">🔥 Gợi ý sản phẩm</string>
 </resources>

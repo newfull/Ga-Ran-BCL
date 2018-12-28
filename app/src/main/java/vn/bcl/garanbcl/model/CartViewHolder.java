@@ -5,7 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import me.himanshusoni.quantityview.QuantityView;
+import com.travijuu.numberpicker.library.NumberPicker;
+
 import vn.bcl.garanbcl.R;
 
 public class CartViewHolder extends RecyclerView.ViewHolder{
@@ -13,7 +14,7 @@ public class CartViewHolder extends RecyclerView.ViewHolder{
     public TextView cardname;
     public ImageView cardimage;
     public TextView cardprice;
-    public QuantityView cardcount;
+    public NumberPicker cardcount;
     public ImageView carddelete;
 
     View mView;

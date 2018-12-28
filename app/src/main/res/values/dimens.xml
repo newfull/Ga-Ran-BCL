@@ -59,4 +59,16 @@
     <dimen name="slide_desc">16dp</dimen>
     <dimen name="desc_padding">40dp</dimen>
     <dimen name="tabLayoutTabSize">60dp</dimen>
+    <dimen name="tab_layout_bar_height">60dp</dimen>
+
+    <dimen name="card_bottom_info_height">80dp</dimen>
+    <dimen name="card_extra_height">20dp</dimen>
+    <dimen name="popular_items_height">160dp</dimen>
+    <dimen name="cart_category_width">230dp</dimen>
+    <dimen name="cart_name_height">30dp</dimen>
+
+    <dimen name="recycler_view_left_offset">9dp</dimen>
+    <dimen name="left_offset">61dp</dimen>
+    <dimen name="card_width">148dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
 </resources>

@@ -7,11 +7,11 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 @SuppressLint("ParcelCreator")
 public class Suggestion implements SearchSuggestion {
-    private String mName;
     private boolean mIsHistory = false;
+    private Item mItem;
 
-    public Suggestion(String suggestion) {
-        mName= suggestion.toLowerCase();
+    public Suggestion(Item item) {
+        mItem = item;
     }
 
     public void setIsHistory(boolean isHistory) {
@@ -23,7 +23,11 @@ public class Suggestion implements SearchSuggestion {
     }
 
     public String getName() {
-        return mName;
+        return mItem.name;
+    }
+
+    public Item getItem(){
+        return mItem;
     }
 
     @Override
@@ -38,6 +42,6 @@ public class Suggestion implements SearchSuggestion {
 
     @Override
     public String getBody() {
-        return mName;
+        return mItem.name;
     }
 }

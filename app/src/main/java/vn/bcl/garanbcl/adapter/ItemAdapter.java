@@ -75,7 +75,7 @@ public class ItemAdapter extends SectionedRecyclerViewAdapter<ItemAdapter.ItemVi
                 .load(item.url)
                 .into(holder.imgThumbnail);
 
-        holder.txtPrice.setText(String.format("%.2f", item.unitPrice));
+        holder.txtPrice.setText(String.format("%.0f", item.unitPrice));
 
         holder.imgAdd.setOnClickListener(new View.OnClickListener()
         {

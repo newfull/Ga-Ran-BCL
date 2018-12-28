@@ -65,6 +65,9 @@ dependencies {
     implementation 'com.github.arimorty:floatingsearchview:2.1.1'
     implementation 'me.himanshusoni.quantityview:quantity-view:1.2.0'
     implementation 'com.github.Cielsk:clearable-edittext:0.0.5'
+    implementation 'com.github.travijuu:numberpicker:1.0.7'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.ramotion.cardslider:card-slider:0.3.0'
 
 }
 

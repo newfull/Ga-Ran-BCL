@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +67,7 @@ public class CategoryPagerAdapter extends FragmentPagerAdapter
         ImageView imgCategoryIcon = v.findViewById(R.id.imgCategoryIcon);
 
         txtCategoryName.setText(solutionList.get(position).category.name);
-        imgCategoryIcon.setImageResource(solutionList.get(position).category.resourceId);
-
+        Glide.with(v).load(solutionList.get(position).category.url).into(imgCategoryIcon);
         return v;
     }
 }

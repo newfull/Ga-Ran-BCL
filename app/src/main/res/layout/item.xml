@@ -27,9 +27,11 @@
 
             <ImageView
                 android:id="@+id/image_cartlist"
-                android:padding="@dimen/large_padding_size"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/card_image_height"/>
+                android:layout_height="@dimen/card_image_height"
+                android:padding="@dimen/large_padding_size"
+                android:background="@drawable/round_outline"
+                />
 
             <TextView
                 android:id="@+id/txtItemName"

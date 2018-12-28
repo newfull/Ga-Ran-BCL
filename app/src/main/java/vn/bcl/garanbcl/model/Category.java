@@ -6,18 +6,32 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 
+import vn.bcl.garanbcl.R;
+
 //TODO: implement according to DB
 public class Category implements Serializable
 {
-    public int id;
-    public String name;
-    public int resourceId;
+    public int id = 0;
+    public String name = "";
+    public String url = "";
 
-    public Category(int id, String name, int resourceId)
+    public Category()
+    {
+        this.id = 0;
+        this.name = "";
+        this.url = "";
+    }
+
+    public Category(int id, String name)
     {
         this.id = id;
         this.name = name;
-        this.resourceId = resourceId;
+    }
 
+    public Category(int id, String name, String url)
+    {
+        this.id = id;
+        this.name = name;
+        this.url = url;
     }
 }

@@ -180,6 +180,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/tab_layout_height"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </android.support.v4.view.ViewPager>
@@ -188,7 +189,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/tab_layout_bar_height"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         app:tabBackground="@color/white"
@@ -216,5 +217,11 @@
         tools:layout_editor_absoluteY="8dp"
         app:floatingSearch_dismissOnOutsideTouch="true"
         />
+
+    <TextView
+        android:id="@+id/txtDummy"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

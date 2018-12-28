@@ -60,7 +60,6 @@ public class CartFragment extends Fragment{
         mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-
         populateRecyclerView();
 
         return view;
@@ -78,7 +77,7 @@ public class CartFragment extends Fragment{
             protected void populateViewHolder(final CartViewHolder viewHolder, final SingleProductModel model, final int position) {
                 viewHolder.cardname.setText(model.getPrname());
                 viewHolder.cardprice.setText("₹ "+model.getPrprice());
-                viewHolder.cardcount.setQuantity(model.getNo_of_items());
+                viewHolder.cardcount.setValue(model.getNo_of_items());
                 Picasso.get().load(model.getPrimage()).into(viewHolder.cardimage);
 
                 totalcost += model.getNo_of_items()*Float.parseFloat(model.getPrprice());
