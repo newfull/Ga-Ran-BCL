@@ -16,6 +16,7 @@ import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -90,6 +91,8 @@ import vn.bcl.likebutton.OnLikeListener;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ItemAdapter.IItemAdapterCallback{
 
+    boolean shouldExecuteOnResume;
+
     private String primaryColor = "#DC143C";
     private String inactiveColor = "#000000";
     private String appBarTabColor = "#990000";
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextSwitcher tabsTitle;
 
     private ArrayList<Order> orderList;
+    private ArrayList<Item> favList;
     private FrameLayout rlCart;
     private SlidingTabLayout tabLayoutAppBar;
     private CheckInternetConnection connected;
@@ -160,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        shouldExecuteOnResume = false;
         setContentView(R.layout.activity_main);
         connected = new CheckInternetConnection(this);
         connected.checkConnection();
@@ -175,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initData();
 
-        //TODO: arrange these to initializer()
         searchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         searchView.setDismissFocusOnItemSelection(true);
 
@@ -225,13 +229,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         initializer();
-
-        /*final Intent intent = new Intent(this, LoginActivity.class);
-        final int REQUEST_CODE_EXAMPLE = 0x9345;
-
-        // Start DetailActivity với request code vừa được khai báo trước đó
-        startActivityForResult(intent, REQUEST_CODE_EXAMPLE);*/
-
     }
 
     private void initializer() {
@@ -262,6 +259,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //set firebase logged in listener
         setupfirebaseAuthListener();
+
+        orderList = new ArrayList<Order>();
+        favList = new ArrayList<Item>();
+
+        fetchCart();
+        fetchFav();
 
     }
 
@@ -379,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 connected.checkConnection();
                 //get position of selected tab
                 int pos = tab.getPosition();
-                if(pos == (tabLayout.getTabCount() - 1)){
+                if(fragments[pos].equals("Account") || fragments[pos].equals("Cart")){
                     if(mAuth.getCurrentUser() == null){
                         final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(MainActivity.this)
                                 .setBackgroundColor(R.color.white)
@@ -464,6 +467,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if(mAuth.getCurrentUser() != null)
+                    navigationView.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
                 slidingDrawer.openDrawer(GravityCompat.START);
                 return true;
         }
@@ -515,7 +520,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void dialogItemDetail(final Item item) {
-        //TODO: fix item detail dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         View view = getLayoutInflater().inflate(R.layout.dialog_item_detail, null);
 
@@ -570,7 +574,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
                             @Override
                             public void OnClick(View view, Dialog dialog) {
-
+                                addItemToCartAnimation(imgThumbnail, item, Integer.parseInt(txtQuantity.getText().toString()));
+                                dialog.dismiss();
                             }
                         })
                         .setNegativeButtonText(R.string.item_add_to_cart_cancel)
@@ -630,16 +635,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        if(checkLiked(item))
+            btnFav.setLiked(true);
+
         btnFav.setOnLikeListener(new OnLikeListener(){
 
             @Override
             public void liked(LikeButton likeButton) {
-
+                addItemToFav(item);
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
-
+                removeItemFromFav(item);
             }
         });
 
@@ -663,55 +671,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateBadge() {
-        if (orderList.size() == 0)
-        {
-            MenuItemBadge.getBadgeTextView(menuItemMessage).setBadgeCount(0, true);
-        } else
-        {
-            MenuItemBadge.getBadgeTextView(menuItemMessage).setBadgeCount(orderList.size());
+        if(MenuItemBadge.getBadgeTextView(menuItemMessage) != null) {
+            if (orderList.size() == 0) {
+                MenuItemBadge.getBadgeTextView(menuItemMessage).setBadgeCount(0, true);
+            } else {
+                MenuItemBadge.getBadgeTextView(menuItemMessage).setBadgeCount(orderList.size());
+            }
         }
     }
 
     private void addItemToCartAnimation(ImageView targetView, final Item item, final int quantity) {
-        FrameLayout destView = findViewById(R.id.rlCart);
+        if(mAuth.getCurrentUser() != null) {
+            FrameLayout destView = findViewById(R.id.rlCart);
 
-        new CircleAnimationUtil().attachActivity(MainActivity.this).setTargetView(targetView).setMoveDuration(300).setDestView(destView).setAnimationListener(new Animator.AnimatorListener()
-        {
-            @Override
-            public void onAnimationStart(Animator animation)
-            {
-            }
+            new CircleAnimationUtil().attachActivity(MainActivity.this).setTargetView(targetView).setMoveDuration(300).setDestView(destView).setAnimationListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                addItemToCart(item, quantity);
-            }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    addItemToCart(item, quantity);
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation)
-            {
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation)
-            {
-            }
-        }).startAnimation();
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            }).startAnimation();
+        }else{
+            showLogin();
+        }
     }
 
     private void addItemToCart(Item item, int quantity) {
         boolean isAdded = false;
-
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("gio-hang").child(mAuth.getCurrentUser().getUid());
         for (Order order : orderList)
         {
-            if (order.item.id == item.id)
+            Item orderItem = order.getItem();
+            if (orderItem.id == item.id)
             {
-                //if item already added to cart, dont add new order
-                //just add the quantity
                 isAdded = true;
-                order.quantity += quantity;
-                order.extendedPrice += item.unitPrice;
+                order.addQuantity(quantity);
+                mDatabase.child(String.valueOf(orderItem.id)).child("quantity").setValue(order.getQuantity());
                 break;
             }
         }
@@ -719,14 +725,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //if item's not added yet
         if (!isAdded)
         {
-            orderList.add(new Order(item, quantity));
+            Order ord = new Order(item, quantity);
+            orderList.add(ord);
+            mDatabase.child(String.valueOf(item.id)).setValue(ord);
         }
-
-        updateBadge();
     }
 
-    private void addItemToFav(Item item) {
-        //TODO: redo Favlist
+    private void addItemToFav(Item it) {
+        boolean isAdded = false;
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("yeu-thich").child(mAuth.getCurrentUser().getUid());
+        for (Item item : favList)
+        {
+            if (item.id == it.id)
+            {
+                isAdded = true;
+                break;
+            }
+        }
+
+        if (!isAdded)
+        {
+            favList.add(it);
+            mDatabase.child(String.valueOf(it.id)).setValue(it);
+        }
+    }
+
+    private void removeItemFromFav(Item it) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("yeu-thich").child(mAuth.getCurrentUser().getUid());
+        mDatabase.child(String.valueOf(it.id)).setValue(null);
+        favList.remove(it);
     }
 
     @Override
@@ -766,6 +793,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         public void OnClick(View view, Dialog dialog) {
                             mAuth.signOut();
                             logout_done.show();
+                            navigationView.findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
                             tabLayout.getTabAt(0).select();
                         }
                     })
@@ -798,7 +826,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
                         @Override
                         public void OnClick(View view, Dialog dialog) {
-                            System.exit(0);
+                            ActivityCompat.finishAffinity(MainActivity.this);
                         }
                     })
                     .setNegativeButtonText(R.string.quit_cancel)
@@ -849,6 +877,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(mAuth.getCurrentUser() == null){
             navigationView.getMenu().getItem(navigationView.getMenu().size()- 2).setVisible(false);
         }else{
+            navigationView.getHeaderView(0).findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             navigationView.getMenu().getItem(navigationView.getMenu().size()- 2).setVisible(true);
         }
     }
@@ -899,8 +928,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         rlCart = actionCart.findViewById(R.id.rlCart);
 
-        orderList = new ArrayList<Order>();
-        orderList.add(new Order(new Item(1, 1, 1, " x", 30, ""), 1));
         updateBadge();
 
         rlCart.setOnClickListener(new View.OnClickListener()
@@ -939,6 +966,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         if(imm.isAcceptingText())
             hideSoftKeyboard();
+
+        if(shouldExecuteOnResume){
+            if(mAuth.getCurrentUser() != null)
+                navigationView.findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+
+        } else{
+            shouldExecuteOnResume = true;
+        }
     }
 
     public void hideSoftKeyboard() {
@@ -1112,5 +1147,85 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setMenuPage(int catId){
         ((MenuFragment) tabAdapter.getItem(1)).changeTab(catId);
         setTab(1);
+    }
+
+    public void showLogin(View v){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivityForResult(intent, Constants.REQUEST_CODE);
+    }
+
+    private void showLogin(){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivityForResult(intent, Constants.REQUEST_CODE);
+    }
+
+    private void fetchCart() {
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseDatabase firebaseDB;
+            DatabaseReference root;
+            firebaseDB = FirebaseDatabase.getInstance();
+            root = firebaseDB.getReference("gio-hang").child(String.valueOf(mAuth.getCurrentUser().getUid()));
+
+            root.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    orderList = new ArrayList<Order>();
+
+                    for (DataSnapshot ords : dataSnapshot.getChildren()) {
+                        Order ord = ords.getValue(Order.class);
+                        orderList.add(ord);
+                    }
+
+                    updateBadge();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+        }
+    }
+
+    private void fetchFav() {
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseDatabase firebaseDB;
+            DatabaseReference root;
+            firebaseDB = FirebaseDatabase.getInstance();
+            root = firebaseDB.getReference("yeu-thich").child(String.valueOf(mAuth.getCurrentUser().getUid()));
+
+            root.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    favList = new ArrayList<Item>();
+
+                    for (DataSnapshot items : dataSnapshot.getChildren()) {
+                        Item item = items.getValue(Item.class);
+                        favList.add(item);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+        }
+    }
+
+    public void checkout(View view) {
+        Intent i = new Intent(MainActivity.this, CheckoutActivity.class);
+        startActivity(i);
+    }
+
+    private boolean checkLiked(final Item item){
+        for(Item i : favList){
+            if(i.id == item.id)
+                return true;
+        }
+
+        return false;
     }
 }

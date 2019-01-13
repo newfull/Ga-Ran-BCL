@@ -130,9 +130,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void initCountryText() {
-        catAnimDuration = getResources().getInteger(R.integer.labels_animation_duration);
-        catOffset1 = getResources().getDimensionPixelSize(R.dimen.left_offset);
-        catOffset2 = getResources().getDimensionPixelSize(R.dimen.card_width);
+        catAnimDuration = 350;
+        catOffset1 = 61;
+        catOffset2 = 148;
         cat1TextView = (TextView) view.findViewById(R.id.tvCatName1);
         cat2TextView = (TextView) view.findViewById(R.id.tvCatName2);
 
@@ -140,9 +140,6 @@ public class HomeFragment extends Fragment {
         cat2TextView.setX(catOffset2);
         cat1TextView.setText(categoryList.get(0).name);
         cat2TextView.setAlpha(0f);
-
-        cat1TextView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/open-sans-extrabold.ttf"));
-        cat2TextView.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/open-sans-extrabold.ttf"));
     }
 
     private void setCountryText(String text, boolean left2right) {

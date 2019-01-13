@@ -3,7 +3,6 @@ package vn.bcl.garanbcl.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,44 +15,47 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cielyang.android.clearableedittext.ClearableEditText;
-import com.geniusforapp.fancydialog.FancyAlertDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
-import vn.bcl.garanbcl.LoginActivity;
+import vn.bcl.garanbcl.AccountActivity;
 import vn.bcl.garanbcl.R;
-import vn.bcl.garanbcl.util.CheckInternetConnection;
 import vn.bcl.garanbcl.util.Constants;
 
 
-public class LoginFragment extends Fragment{
+public class AccountInfoFragment extends Fragment {
 
     // UI references.
     private ClearableEditText mEmailView;
     private ClearableEditText mPasswordView;
+    private ClearableEditText mRePasswordView;
+    private ClearableEditText mNameView;
+    private ClearableEditText mPhoneView;
     private View mProgressView;
-    private View mLoginFormView;
+    private View mInfoFormView;
     private static final String EMAIL = "email";
 
-    private Button facebookLoginButton, googleLoginButton;
-    private TextView signupNowButton, mEmailSignInButton;
+    private TextView mSaveInfoButton;
 
     protected FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    public LoginFragment() {}
+    public AccountInfoFragment() {}
 
     View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_login, container, false);
+        view = inflater.inflate(R.layout.fragment_info, container, false);
 
         bindViews();
         setListeners();
@@ -62,27 +64,35 @@ public class LoginFragment extends Fragment{
     }
 
     private void setListeners() {
-        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-        googleLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+        mSaveInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptSave();
             }
         });
+
+        mNameView.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+            @Override
+            public boolean onEditorAction(TextView v, int id, KeyEvent event) {
+                if (id == EditorInfo.IME_ACTION_NEXT || id == EditorInfo.IME_NULL || id == KeyEvent.KEYCODE_ENTER) {
+                    mEmailView.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mNameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    ((AccountActivity) getActivity()).hideKeyboard(mNameView);
+                } else{
+                    ((AccountActivity) getActivity()).showKeyboard(mNameView);
+                }
+            }
+        });
+
 
         mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener(){
             @Override
@@ -99,9 +109,9 @@ public class LoginFragment extends Fragment{
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    ((LoginActivity) getActivity()).hideKeyboard(mEmailView);
+                    ((AccountActivity) getActivity()).hideKeyboard(mEmailView);
                 } else{
-                    ((LoginActivity) getActivity()).showKeyboard(mEmailView);
+                    ((AccountActivity) getActivity()).showKeyboard(mEmailView);
                 }
             }
         });
@@ -109,9 +119,8 @@ public class LoginFragment extends Fragment{
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                if (id == EditorInfo.IME_ACTION_NEXT || id == EditorInfo.IME_NULL || id == KeyEvent.KEYCODE_ENTER) {
+                    mRePasswordView.requestFocus();
                     return true;
                 }
                 return false;
@@ -121,75 +130,89 @@ public class LoginFragment extends Fragment{
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    ((LoginActivity) getActivity()).hideKeyboard(mPasswordView);
+                    ((AccountActivity) getActivity()).hideKeyboard(mPasswordView);
                 } else{
-                    ((LoginActivity) getActivity()).showKeyboard(mPasswordView);
+                    ((AccountActivity) getActivity()).showKeyboard(mPasswordView);
                 }
             }
         });
 
-        signupNowButton.setOnClickListener(new TextView.OnClickListener(){
-
+        mRePasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                ((LoginActivity) getActivity()).changeTab(1);
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                    attemptSave();
+                    return true;
+                }
+                return false;
             }
         });
-
-        /*logoutButton.setOnClickListener(new View.OnClickListener() {
+        mRePasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (currentUser != null) {
-                    if (currentUser instanceof SmartFacebookUser) {
-                        smartLogin = SmartLoginFactory.build(LoginType.Facebook);
-                    } else if(currentUser instanceof SmartGoogleUser) {
-                        smartLogin = SmartLoginFactory.build(LoginType.Google);
-                    } else {
-                        smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
-                    }
-                    boolean result = smartLogin.logout(getActivity());
-                    if (result) {
-                        Toast.makeText(getActivity(), "User logged out successfully", Toast.LENGTH_SHORT).show();
-                    }
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    ((AccountActivity) getActivity()).hideKeyboard(mRePasswordView);
+                } else{
+                    ((AccountActivity) getActivity()).showKeyboard(mRePasswordView);
                 }
             }
-        });*/
+        });
     }
 
     private void bindViews() {
-        facebookLoginButton = view.findViewById(R.id.fb_login_button);
-        googleLoginButton = view.findViewById(R.id.google_login_button);
-        signupNowButton = view.findViewById(R.id.signup_now);
+        mNameView = view.findViewById(R.id.name);
         mEmailView = view.findViewById(R.id.email);
+        mPhoneView = view.findViewById(R.id.phone);
         mPasswordView = view.findViewById(R.id.password);
-        mEmailSignInButton = view.findViewById(R.id.sign_in_button);
-        mLoginFormView = view.findViewById(R.id.login_form);
+        mRePasswordView = view.findViewById(R.id.repassword);
+        mSaveInfoButton = view.findViewById(R.id.save_info_button);
+        mInfoFormView = view.findViewById(R.id.info_form);
         mProgressView = view.findViewById(R.id.login_progress);
+
+        mNameView.setText(mAuth.getCurrentUser().getDisplayName());
+        mPhoneView.setText(mAuth.getCurrentUser().getPhoneNumber());
+        mEmailView.setText(mAuth.getCurrentUser().getEmail());
     }
 
-    private void attemptLogin() {
-        CheckInternetConnection connected = new CheckInternetConnection(getActivity());
-        connected.checkConnection();
-
+    private void attemptSave() {
         // Reset errors.
+        mNameView.setError(null);
         mEmailView.setError(null);
+        mPhoneView.setError(null);
         mPasswordView.setError(null);
+        mRePasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String name = mNameView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String phone = mPhoneView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+        final String repassword = mRePasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password) || password.isEmpty()) {
             mPasswordView.setError(getString(R.string.error_short_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
-        // Check for a valid email address.
+        if (!TextUtils.isEmpty(repassword) && !isPasswordValid(repassword) && !password.equals(repassword)) {
+            mRePasswordView.setError(getString(R.string.error_repassword));
+            focusView = mRePasswordView;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(name)) {
+            mNameView.setError(getString(R.string.error_field_required));
+            focusView = mNameView;
+            cancel = true;
+        } else if (!isNameValid(name)) {
+            mNameView.setError(getString(R.string.error_invalid_name));
+            focusView = mNameView;
+            cancel = true;
+        }
+
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
@@ -204,22 +227,27 @@ public class LoginFragment extends Fragment{
             focusView.requestFocus();
         } else {
             showProgress(true);
+            FirebaseUser user = mAuth.getCurrentUser();
 
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-                                Intent data = new Intent();
-                                getActivity().setResult(Constants.REQUEST_CODE, data.putExtra("User", mAuth.getCurrentUser().getUid()));
-                                getActivity().finish();
-                            }else {
-                                showProgress(false);
-                                onLoginFailure();
-                            }
-                        }
-                    });
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(name)
+                    .build();
+
+            user.updateProfile(profileUpdates);
+
+            user.updateEmail(email);
+            if(password != null || !password.isEmpty())
+                user.updatePassword(password);
+
+
+            showProgress(false);
+            Toast.makeText(getActivity(), "Lưu thành công!",
+                    Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isNameValid(String name) {
+        return (name.length() < 10 || name.indexOf(" ") < 0 || name.startsWith(" ") || name.matches(".*\\d+.*"));
     }
 
     private boolean isEmailValid(String email) {
@@ -242,12 +270,12 @@ public class LoginFragment extends Fragment{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+            mInfoFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mInfoFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mInfoFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -263,32 +291,8 @@ public class LoginFragment extends Fragment{
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mInfoFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
-
-    public void onLoginFailure() {
-        final FancyAlertDialog.Builder alert = new FancyAlertDialog.Builder(getActivity())
-                .setBackgroundColor(R.color.white)
-                .setimageResource(R.drawable.logo)
-                .setTextTitle(null)
-                .setTextSubTitle(R.string.login_failed)
-                .setBody(R.string.login_failed_desc)
-                .setPositiveButtonText("Đóng")
-                .setPositiveColor(R.color.colorPrimaryDark)
-                .setOnPositiveClicked(new FancyAlertDialog.OnPositiveClicked() {
-                    @Override
-                    public void OnClick(View view, Dialog dialog) {
-                        dialog.dismiss();
-                        mEmailView.requestFocus();
-                    }
-                })
-                .setBodyGravity(FancyAlertDialog.TextGravity.CENTER)
-                .setTitleGravity(FancyAlertDialog.TextGravity.CENTER)
-                .setSubtitleGravity(FancyAlertDialog.TextGravity.CENTER)
-                .setCancelable(false)
-                .build();
-        alert.show();
-    }
 }

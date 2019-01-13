@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import vn.bcl.garanbcl.MainActivity;
 import vn.bcl.garanbcl.model.Item;
 import vn.bcl.garanbcl.R;
 
@@ -33,7 +34,6 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Ho
         LinearLayout horizontalLayout;
         RoundedImageView popularImage;
         TextView popularTitle;
-        ImageButton popularPlus;
 
         public HorizontalViewHolder(View itemView) {
             super(itemView);
@@ -41,7 +41,6 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Ho
             horizontalLayout = itemView.findViewById(R.id.horizontal_parent_layout);
             popularImage = itemView.findViewById(R.id.popular_food_pc);
             popularTitle = itemView.findViewById(R.id.popular_food_title);
-            popularPlus = itemView.findViewById(R.id.popular_food_plus);
 
         }
     }
@@ -62,11 +61,6 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Ho
     public void onBindViewHolder(@NonNull HorizontalAdapter.HorizontalViewHolder holder, final int position) {
         holder.popularTitle.setText(popularFoods.get(position).name);
         Picasso.get().load(popularFoods.get(position).url).fit().into(holder.popularImage);
-
-        holder.popularPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }});
 
         holder.horizontalLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,11 +22,13 @@ import com.kekstudio.dachshundtablayout.DachshundTabLayout;
 
 import butterknife.ButterKnife;
 import vn.bcl.garanbcl.adapter.TabAdapter;
-import vn.bcl.garanbcl.fragment.LoginFragment;
-import vn.bcl.garanbcl.fragment.SignupFragment;
+import vn.bcl.garanbcl.fragment.AccountFavFragment;
+import vn.bcl.garanbcl.fragment.AccountInfoFragment;
+import vn.bcl.garanbcl.fragment.AccountOrdersFragment;
 import vn.bcl.garanbcl.util.CheckInternetConnection;
+import vn.bcl.garanbcl.util.Constants;
 
-public class LoginActivity extends AppCompatActivity {
+public class AccountActivity extends AppCompatActivity {
     private TabAdapter tabAdapter;
     private DachshundTabLayout tabLayout;
     private ViewPager viewPager;
@@ -35,12 +37,22 @@ public class LoginActivity extends AppCompatActivity {
     private String primaryColor = "#ff2222";
     private String inactiveColor = "#ffffff";
 
+    int[] tabsIcons = {
+            R.drawable.user_info,
+            R.drawable.likes,
+            R.drawable.order
+    };
+    String txttrades[]={
+            "Thông tin cá nhân",
+            "Danh sách yêu thích",
+            "Danh sách đơn hàng"
+    };
     private CheckInternetConnection connected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_account);
         connected = new CheckInternetConnection(this);
         connected.checkConnection();
 
@@ -54,6 +66,18 @@ public class LoginActivity extends AppCompatActivity {
         AppEventsLogger.activateApp(this);
 
         initializer();
+
+        Intent iin= getIntent();
+        Bundle b = iin.getExtras();
+
+        if(b!=null)
+        {
+            String j =(String) b.get("Tab");
+            for(int i = 0; i < txttrades.length; i++){
+                if(txttrades[i].equals(j))
+                    changeTab(i);
+            }
+        }
     }
 
 
@@ -63,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         //set up tabs
         setFragments();
         setUpTabsView();
+        setTabsIcons();
         setTabsOnClickListener();
         setCurrentTabTextColor(primaryColor);
 
@@ -87,14 +112,26 @@ public class LoginActivity extends AppCompatActivity {
 
     //add fragments to tablayout
     public void setFragments() {
-        tabAdapter.addFragment(new LoginFragment(), "Đăng nhập");
-        tabAdapter.addFragment(new SignupFragment(), "Đăng ký");
+        tabAdapter.addFragment(new AccountInfoFragment(), "Tài khoản");
+        tabAdapter.addFragment(new AccountFavFragment(), "Yêu thích");
+        tabAdapter.addFragment(new AccountOrdersFragment(), "Đơn hàng");
+    }
+
+    private void setTabsIcons() {
+        for(int i = 0; i < tabsIcons.length; i++){
+            tabLayout.getTabAt(i).setIcon(tabsIcons[i]);
+        }
     }
 
     //set up viewpager and tablayout
     private void setUpTabsView() {
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        for (int i = 0; i < tabsIcons.length; i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            tab.setText("");
+        }
     }
 
     //activate appbar
@@ -112,14 +149,24 @@ public class LoginActivity extends AppCompatActivity {
     //press back button
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        super.onBackPressed();
+        //super.onBackPressed();
+
+        //get selected tab position
+        int tab_position = tabLayout.getSelectedTabPosition();
+
+        //decide what to do
+        if (tab_position != 0) {
+            //select the first tab
+            tabLayout.getTabAt(0).select();
+        } else {
+            //quit
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(AccountActivity.this, MainActivity.class);
         startActivity(intent);
         this.finish();
         return true;
@@ -130,10 +177,8 @@ public class LoginActivity extends AppCompatActivity {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //set selected tab text color
-                setCurrentTabTextColor(primaryColor);
-
                 View v = findViewById(R.id.loginViewPager);
+                getSupportActionBar().setTitle(txttrades[tab.getPosition()]);
                 clearText(v);
             }
 
@@ -165,13 +210,6 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void hideKeyboard(View view) {

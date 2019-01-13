@@ -58,6 +58,7 @@ public class MenuFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         firebaseDB = FirebaseDatabase.getInstance();
@@ -139,6 +140,7 @@ public class MenuFragment extends Fragment{
 
         // Get the ViewPager and set it's CategoryPagerAdapter so that it can display items
         ViewPager vpItem = (ViewPager) view.findViewById(R.id.vpItem);
+        if (!isAdded()) return;
         CategoryPagerAdapter categoryPagerAdapter = new CategoryPagerAdapter(getChildFragmentManager(), getActivity(), solutionList);
         vpItem.setOffscreenPageLimit(categoryPagerAdapter.getCount());
         vpItem.setAdapter(categoryPagerAdapter);

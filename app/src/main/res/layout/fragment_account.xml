@@ -34,6 +34,7 @@
             android:src="@drawable/logo" />
 
         <customfonts.MyTextView_Roboto_Bold
+            android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,6 +44,7 @@
             android:textSize="23dp" />
 
         <customfonts.MyTextView_Roboto_Medium
+            android:id="@+id/profile_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -72,8 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:nestedScrollingEnabled="false"
-            android:paddingBottom="50dp">
+            android:nestedScrollingEnabled="false">
 
         </android.support.v7.widget.RecyclerView>
     </ScrollView>

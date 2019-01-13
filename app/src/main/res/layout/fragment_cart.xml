@@ -8,6 +8,24 @@
     android:orientation="vertical"
     android:weightSum="10">
 
+    <ImageView
+        android:id="@+id/no_user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:srcCompat="@drawable/background_dialog" />
+
+    <ImageView
+        android:id="@+id/no_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:background="@color/background"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:srcCompat="@drawable/empty_cart" />
+
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
@@ -28,12 +46,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
         android:background="@color/background"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:stretchColumns="0, 1, 2">
+            android:layout_weight="0.5">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -45,7 +63,7 @@
                     android:id="@+id/txtSum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/margin_small"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:text="@string/cart_sum"
                     android:textSize="15sp"
@@ -55,72 +73,111 @@
                     android:id="@+id/txtSumValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/xlarge_margin_size"
-                    android:text="500000đ"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:text="500000"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/txtCurrency2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currency"
                     android:textSize="15sp" />
 
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/normal_padding_size">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/txtDiscount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/margin_small"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:text="@string/cart_discount"
                     android:textColor="@color/colorPomegranate"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:textStyle="italic" />
 
                 <TextView
                     android:id="@+id/txtDiscountValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/xlarge_margin_size"
-                    android:text="-5000đ"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:text="-5000"
+                    android:textColor="@color/colorPomegranate"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/txtCurrency3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currency"
                     android:textColor="@color/colorPomegranate"
                     android:textSize="14sp"
                     android:textStyle="italic" />
             </TableRow>
 
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:stretchColumns="0, 1, 2">
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/margin_medium">
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_weight="0.3">
 
                 <TextView
                     android:id="@+id/txtTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_gravity="center_horizontal|end"
                     android:layout_marginStart="@dimen/margin_medium"
                     android:text="@string/cart_total"
+                    android:textAlignment="center"
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
                 <TextView
                     android:id="@+id/txtTotalValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:paddingEnd="@dimen/margin_small"
+                    android:text="500000"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtCurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/xlarge_margin_size"
-                    android:text="500000d"
+                    android:text="@string/currency"
                     android:textColor="@color/colorAccent"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
             </TableRow>
 
         </TableLayout>
-
     </LinearLayout>
 
     <TextView

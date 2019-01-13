@@ -4,10 +4,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 
+import vn.bcl.garanbcl.MainActivity;
 import vn.bcl.garanbcl.R;
 import com.geniusforapp.fancydialog.FancyAlertDialog;
+
+import static android.support.v4.app.ActivityCompat.finishAffinity;
+import static android.support.v4.content.ContextCompat.startActivity;
 
 
 public class CheckInternetConnection {
@@ -51,7 +56,7 @@ public class CheckInternetConnection {
                         .setOnNegativeClicked(new FancyAlertDialog.OnNegativeClicked() {
                             @Override
                             public void OnClick(View view, Dialog dialog) {
-                                System.exit(0);
+
                             }
                         })
                         .setBodyGravity(FancyAlertDialog.TextGravity.CENTER)

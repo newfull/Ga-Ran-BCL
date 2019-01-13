@@ -32,9 +32,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:paddingBottom="@dimen/large_margin_size">
+                android:layout_alignParentTop="true">
 
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/image_cartlist"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@color/colorPrimaryDark" />
+
+                <ImageView
+                    android:id="@+id/deletecard"
+                    android:layout_width="@dimen/add_image_size"
+                    android:layout_height="@dimen/add_image_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/add_item_bg"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/image_cartlist"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.836" />
 
                 <ImageView
                     android:id="@+id/image_cartlist"
@@ -92,57 +122,8 @@
                     app:layout_constraintStart_toEndOf="@+id/image_cartlist"
                     app:layout_constraintTop_toBottomOf="@+id/cart_prtitle" />
 
-                <com.travijuu.numberpicker.library.NumberPicker xmlns:numberpicker="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/cart_prcount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="52dp"
-                    numberpicker:focusable="false"
-                    numberpicker:layout_constraintEnd_toEndOf="parent"
-                    numberpicker:layout_constraintHorizontal_bias="0.947"
-                    numberpicker:layout_constraintStart_toEndOf="@+id/image_cartlist"
-                    numberpicker:layout_constraintTop_toTopOf="parent"
-                    numberpicker:max="99"
-                    numberpicker:min="1"
-                    numberpicker:unit="1" />
-
-                <CheckBox
-                    android:id="@+id/item_select"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintBottom_toTopOf="@+id/cart_prcount"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/cart_prtitle"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
             </android.support.constraint.ConstraintLayout>
 
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_name_height"
-            android:background="@color/md_red_500">
-
-
-            <ImageView
-                android:id="@+id/deletecard"
-                android:layout_width="@dimen/add_image_size"
-                android:layout_height="@dimen/add_image_size"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/margin_size"
-                android:background="@drawable/add_item_bg"
-                android:padding="3dp"
-                android:src="@drawable/ic_delete" />
 
         </RelativeLayout>
 

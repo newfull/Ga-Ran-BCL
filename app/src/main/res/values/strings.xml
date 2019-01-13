@@ -87,9 +87,27 @@
     <string name="item_add_to_cart_cancel">Hủy</string>
 
     <string name="cart_sum">Tổng tiền:</string>
-    <string name="cart_discount">Khuyến mãi (10%):</string>
+    <string name="cart_discount">KM(10%):</string>
     <string name="cart_total">Tổng thanh toán:</string>
     <string name="cart_checkout">ĐẶT HÀNG NGAY</string>
 
+    <string name="checkout_confirm">ĐẶT HÀNG</string>
+    <string name="ord_total">Tổng hóa đơn:</string>
+    <string name="checkout_title">Xác nhận đơn hàng</string>
+
     <string name="popular">🔥 Gợi ý sản phẩm</string>
+
+    <string name="currency">VNĐ</string>
+    <string name="nav_login_btn">Đăng nhập</string>
+    <string name="nav_name">🍗 GÀ RÁN BCL</string>
+    <string name="nav_slogan">Thương hiệu gà rán số 1 Việt Nam</string>
+    <string name="nav_phone">📞 1 9 0 0 9 0 9 9</string>
+    <string name="nav_mail">📧 customer@bcl.com</string>
+
+    <string name="empty_address">Nhấp vào đây để chọn địa chỉ</string>
+    <string name="title_activity_address">AddressActivity</string>
+    <string name="save">Lưu</string>
+    <string name="change_info">Tài khoản</string>
+    <string name="prompt_phone">Điện thoại</string>
+
 </resources>
